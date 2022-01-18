@@ -3,7 +3,7 @@ package frc.robot;
 public class Config {
 
     //Version number. Update every pull request or push!
-    public static final String version = "0.1.1";
+    public static final String version = "0.1.2";
     
     //1 = normal, -1 = inverted
     public static final double kInvertDir = 1;

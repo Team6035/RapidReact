@@ -37,4 +37,6 @@ public abstract class Subsystems {
      */
     public abstract diagnosticState getDiagnosticState(); 
 
+    public abstract void initMotorControllers();
+
 }

@@ -53,4 +53,15 @@ public class RobotMap {
 		return rightDriveC;
 	}
 
+	static WPI_TalonFX shooterBottom = new WPI_TalonFX(Constants.kShooterBottomCanID);
+	static WPI_TalonFX shooterTop = new WPI_TalonFX(Constants.kShooterTopCanID);
+
+	public static WPI_TalonFX getShooterBottom() {
+		return shooterBottom;
+	}
+
+	public static WPI_TalonFX getShooterTop() {
+		return shooterTop;
+	}
+
 }
