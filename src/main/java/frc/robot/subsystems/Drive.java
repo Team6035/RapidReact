@@ -8,26 +8,18 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.fasterxml.jackson.databind.ser.impl.FailingSerializer;
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Config;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 
-public class Drive{
+public class Drive extends Subsystems {
     
     MotorControllerGroup mLeftDrive;
     MotorControllerGroup mRightDrive;
@@ -45,8 +37,6 @@ public class Drive{
         new TrapezoidProfile.Constraints(Constants.kDriveMaxTurnSpeed, Constants.kDriveMaxTurnAccel));
 
 
-    Joystick stick; 
-    XboxController xbox = new XboxController(Config.kXboxPort);
     public static Drive driveInstance;
     public static Drive getInstance() {
         if (driveInstance == null) {
@@ -112,12 +102,9 @@ public class Drive{
             rightDiff = Math.max(rightDiff, -manRampRateRev);
             rightPower = lastRightSPeed + rightDiff;
         }
-        System.out.println("Mode - " + currentMode);
         //set motors
-        System.out.println("leftpower " + leftPower);
         RobotMap.leftDriveMotors.set(leftPower * Config.kInvertDir);
 
-        System.out.println("rightpower " + rightPower);
         RobotMap.rightDriveMotors.set(rightPower * Config.kInvertDir);
 
         lastLeftSPeed = leftPower;
@@ -133,35 +120,35 @@ public class Drive{
         setMotors(leftPower, -rightPower);
     }
 
-    private void steerPriority(double left, double right)
-    {
-        if (left - right > 2)
-        {
-            left = 1;
-            right = -1;
-        }
-        else if (right - left > 2)
-        {
-            left = -1;
-            right = 1;
-        }
-        else if (Math.max(right, left) > 1)
-        {
-            left = left - (Math.max(right,left) - 1);
-            right = right - (Math.max(right,left) - 1);
-        }
-        else if (Math.min(right, left) < -1)
-        {
-            left = left - (Math.min(right,left) + 1);
-            right = right - (Math.min(right,left) + 1);
-        }
-        SmartDashboard.putNumber("leftPower", left);
-        SmartDashboard.putNumber("rightPower", left);
-        SmartDashboard.putNumber("SteerLeft", left-right);
-        // leftDrive.set(-left);
-        // rightDrive.set(right);
-        setMotors(left, -right);
-    }
+    // private void steerPriority(double left, double right)
+    // {
+    //     if (left - right > 2)
+    //     {
+    //         left = 1;
+    //         right = -1;
+    //     }
+    //     else if (right - left > 2)
+    //     {
+    //         left = -1;
+    //         right = 1;
+    //     }
+    //     else if (Math.max(right, left) > 1)
+    //     {
+    //         left = left - (Math.max(right,left) - 1);
+    //         right = right - (Math.max(right,left) - 1);
+    //     }
+    //     else if (Math.min(right, left) < -1)
+    //     {
+    //         left = left - (Math.min(right,left) + 1);
+    //         right = right - (Math.min(right,left) + 1);
+    //     }
+    //     SmartDashboard.putNumber("leftPower", left);
+    //     SmartDashboard.putNumber("rightPower", left);
+    //     SmartDashboard.putNumber("SteerLeft", left-right);
+    //     // leftDrive.set(-left);
+    //     // rightDrive.set(right);
+    //     setMotors(left, -right);
+    // }
 
 
 
@@ -198,34 +185,11 @@ public class Drive{
 			power = -maxPower;
 		}
         
-        System.out.println("POWER: " + power);
 		arcadeDrive(1.0, steering, power);
 		return encoderIsWithinDistance(distance, 0.05);
     }
 
 
-// /**
-//  * Drive at a given distance and gyro heading.
-//  * @param maxPower
-//  * @param targetHeading in degrees.
-//  * @param distance in metres.
-//  * @return True when driven to given distance, within a threshold. @see getEncoderWithinDistance()
-//  */
-// public boolean actionSensorDrive(double maxPower, double targetHeading, double distance) {
-    // double steering = (targetHeading - _imu.getYaw()) * Constants.kGyroDriveTurnKp;
-    // double power = maxPower;
-    // if (power >= 0 && power > maxPower) {
-        // power = maxPower;
-    // } else if (power < 0 && power < -maxPower) {
-        // power = -maxPower;
-    // }
-    // 
-    // arcadeDrive(1.0, steering, power);
-    // System.out.println("Power " + power);
-    // System.out.println("Steering " + steering);
-    // System.out.println(getYaw());
-    // return encoderIsWithinDistance(distance, 0.1);//0.01
-// }
 
     public AHRS getImuInstance() {
 		if (_imu == null) {
@@ -240,7 +204,7 @@ public class Drive{
 	 * @return Boolean true when within range.
 	 */
 	public boolean encoderIsWithinDistance(double distance, double threshRange) {
-		return /*Math.abs*/(distance - getAvgEncoderDistance()) < threshRange;
+		return (distance - getAvgEncoderDistance()) < threshRange;
 	}
 
 	/**
@@ -297,4 +261,14 @@ public class Drive{
 	public boolean getBrakes() {
 		return true;
 	}
+    @Override
+    public boolean initMechanism() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+    @Override
+    public diagnosticState getDiagnosticState() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

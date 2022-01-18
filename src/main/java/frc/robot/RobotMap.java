@@ -1,34 +1,24 @@
 package frc.robot;
 
 
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
-import com.ctre.phoenix.motorcontrol.can.*;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.InvertType;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
 public class RobotMap {
 
 	static WPI_TalonFX leftDriveA = new WPI_TalonFX(Constants.kLeftDriveACanID);
 	static WPI_TalonFX leftDriveB = new WPI_TalonFX(Constants.kLeftDriveBCanID);
-	public static MotorControllerGroup leftDriveMotors = new MotorControllerGroup(leftDriveA, leftDriveB);
+	static WPI_TalonFX leftDriveC = new WPI_TalonFX(Constants.kLeftDriveCCanID);
+	public static MotorControllerGroup leftDriveMotors = new MotorControllerGroup(leftDriveA, leftDriveB, leftDriveC);
 
 
 	static WPI_TalonFX rightDriveA = new WPI_TalonFX(Constants.kRightDriveACanID);
 	static WPI_TalonFX rightDriveB = new WPI_TalonFX(Constants.kRightDriveBCanID);
-	public static MotorControllerGroup rightDriveMotors = new MotorControllerGroup(rightDriveA, rightDriveB);
+	static WPI_TalonFX rightDriveC = new WPI_TalonFX(Constants.kRightDriveCCanID);
+	public static MotorControllerGroup rightDriveMotors = new MotorControllerGroup(rightDriveA, rightDriveB, rightDriveC);
 
     
 	public static MotorControllerGroup getLeftDrive() {
@@ -53,6 +43,14 @@ public class RobotMap {
 
 	public static WPI_TalonFX getRightDriveB() {
 		return rightDriveB;
+	}
+
+	public static WPI_TalonFX getLeftDriveC() {
+		return leftDriveC;
+	}
+
+	public static WPI_TalonFX getRightDriveC() {
+		return rightDriveC;
 	}
 
 }

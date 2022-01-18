@@ -5,8 +5,11 @@ public class Constants {
 
     public static int kLeftDriveACanID = 1;
     public static int kLeftDriveBCanID = 2;
-    public static int kRightDriveACanID = 3;
-    public static int kRightDriveBCanID = 4;
+	public static int kLeftDriveCCanID = 3;
+
+    public static int kRightDriveACanID = 5;
+    public static int kRightDriveBCanID = 6;
+	public static int kRightDriveCCanID = 7;
 
 
     public static double kDriveMaxSpeed = 4.18;
