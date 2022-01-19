@@ -1,6 +1,9 @@
 package frc.robot;
 
 public class Config {
+
+    //Version number. Update every pull request or push!
+    public static final String version = "0.1.1";
     
     //1 = normal, -1 = inverted
     public static final double kInvertDir = 1;
@@ -51,10 +54,19 @@ public class Config {
     public static final double kDriveGyroRateThresh = 3.0;
 
     //Xbox
-    public static final int kXboxPort = 1;
+    public static final int kXbox1Port = 1;
+
+    //Joystick
+    public static final int kJoystick1Port = 0;
 
     //Use stallSense with normal teleop drive
     public static final boolean kUseStallSenseTeleopDrive = false;
+
+    //Default value for debug output
+    public static final boolean kDebugOutputDefault = false;
+
+    //Default value for verbose output
+    public static final boolean kVerboseOutputDefault = false;
 
         
 }
