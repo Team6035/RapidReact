@@ -48,7 +48,7 @@ public double deadZoneX(double input) {
     * @return X from -1 to 1.
     */
    public double getDriveSteering() {
-       steering = (deadZoneX(stick.getX()));
+       steering = (deadZoneX(stick.getX())*.7);
        return steering;
    }
 
