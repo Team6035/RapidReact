@@ -8,21 +8,14 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.fasterxml.jackson.databind.ser.impl.FailingSerializer;
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMax.IdleMode;
-
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Config;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
@@ -112,12 +105,12 @@ public class Drive{
             rightDiff = Math.max(rightDiff, -manRampRateRev);
             rightPower = lastRightSPeed + rightDiff;
         }
-        System.out.println("Mode - " + currentMode);
+       //System.out.println("Mode - " + currentMode);
         //set motors
-        System.out.println("leftpower " + leftPower);
+       // System.out.println("leftpower " + leftPower);
         RobotMap.leftDriveMotors.set(leftPower * Config.kInvertDir);
 
-        System.out.println("rightpower " + rightPower);
+      // System.out.println("rightpower " + rightPower);
         RobotMap.rightDriveMotors.set(rightPower * Config.kInvertDir);
 
         lastLeftSPeed = leftPower;
@@ -132,7 +125,30 @@ public class Drive{
         //Write to motors
         setMotors(leftPower, -rightPower);
     }
-
+   /**
+    * Drives the robot, calculating other settings
+    *Stall detection disabled currently
+    * @param throttle
+    * @param steering
+    * @param power
+    * @param stallSense
+    */
+    public void smartDrive(double throttle, double steering, double power, boolean stallSense) {
+        double pitch = _imu.getPitch();
+        double stallThreshold = (Config.kStallThreshold);
+        double tipThreshold = (Config.kTipThreshold);
+        if(pitch > tipThreshold && stallSense == true) {
+            setMotors(-Config.kTipCorrectionPower, -Config.kTipCorrectionPower);
+            System.out.println("PITCH > THRESHOLD");
+        } else if(pitch < -tipThreshold && stallSense == true) {
+            setMotors(Config.kTipCorrectionPower, Config.kTipCorrectionPower);
+            System.out.println("PITCH < THRESHOLD");
+        } else {
+            //Normal
+              arcadeDrive(throttle, steering, power);
+        }
+    }
+    /*
     private void steerPriority(double left, double right)
     {
         if (left - right > 2)
@@ -163,7 +179,7 @@ public class Drive{
         setMotors(left, -right);
     }
 
-
+*/
 
    /**
     * @param targetHeading
@@ -297,4 +313,5 @@ public class Drive{
 	public boolean getBrakes() {
 		return true;
 	}
+    
 }
