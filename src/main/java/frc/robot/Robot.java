@@ -83,14 +83,13 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    Drive.getInstance().setGameMode(Drive.gameMode.TELEOP);
+
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
     
-    Drive.getInstance().smartDrive(m_controls.getDriveThrottle(),m_controls.getDriveSteering(),m_controls.getDrivePower(),true); //I've tested smart drive and its not dodgy from my testing, , ,still treat with caution, it hasnt been tested in a scrim of any sort of environment with field hazards.
   }
 
   /** This function is called once when the robot is disabled. */

@@ -8,12 +8,14 @@ public class RobotMap {
 
 	static WPI_TalonFX leftDriveA = new WPI_TalonFX(Constants.kLeftDriveACanID);
 	static WPI_TalonFX leftDriveB = new WPI_TalonFX(Constants.kLeftDriveBCanID);
-	public static MotorControllerGroup leftDriveMotors = new MotorControllerGroup(leftDriveA, leftDriveB);
+	static WPI_TalonFX leftDriveC = new WPI_TalonFX(Constants.kLeftDriveCCanID);
+	public static MotorControllerGroup leftDriveMotors = new MotorControllerGroup(leftDriveA, leftDriveB, leftDriveC);
 
 
 	static WPI_TalonFX rightDriveA = new WPI_TalonFX(Constants.kRightDriveACanID);
 	static WPI_TalonFX rightDriveB = new WPI_TalonFX(Constants.kRightDriveBCanID);
-	public static MotorControllerGroup rightDriveMotors = new MotorControllerGroup(rightDriveA, rightDriveB);
+	static WPI_TalonFX rightDriveC = new WPI_TalonFX(Constants.kRightDriveCCanID);
+	public static MotorControllerGroup rightDriveMotors = new MotorControllerGroup(rightDriveA, rightDriveB, rightDriveC);
 
     
 	public static MotorControllerGroup getLeftDrive() {
@@ -38,6 +40,14 @@ public class RobotMap {
 
 	public static WPI_TalonFX getRightDriveB() {
 		return rightDriveB;
+	}
+
+	public static WPI_TalonFX getLeftDriveC() {
+		return leftDriveC;
+	}
+
+	public static WPI_TalonFX getRightDriveC() {
+		return rightDriveC;
 	}
 
 }
