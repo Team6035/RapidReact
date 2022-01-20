@@ -276,4 +276,9 @@ public class Drive extends Subsystems {
         // TODO Auto-generated method stub
         
     }
+    @Override
+    public diagnosticState test() {
+        
+        return null;
+    }
 }

@@ -39,4 +39,10 @@ public abstract class Subsystems {
 
     public abstract void initMotorControllers();
 
+    /**
+     * Method run when in test mode. Runs and prints output to chat
+     * @return the diagnosticState
+     */
+    public abstract diagnosticState test();
+
 }

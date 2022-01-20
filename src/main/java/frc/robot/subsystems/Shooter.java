@@ -4,10 +4,8 @@
 
 package frc.robot.subsystems;
 
-import java.nio.DoubleBuffer;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.StickyFaults;
 
 import frc.robot.Constants;
 import frc.robot.RobotMap;
@@ -166,6 +164,12 @@ public class Shooter extends Subsystems{
         RobotMap.getShooterBottom().set(ControlMode.Velocity, getShooterSetSpeed(speedSlot));
         RobotMap.getShooterTop().set(ControlMode.Velocity, getShooterSetSpeed(speedSlot) * ratio * wheelRatio);
 
+    }
+
+    @Override
+    public diagnosticState test() {
+        // TODO Auto-generated method stub
+        return null;
     }
     
 }

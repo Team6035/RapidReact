@@ -14,6 +14,12 @@ public class Constants {
 	public static int kShooterBottomCanID = 9;
 	public static int kShooterTopCanID = 10;
 
+	public static int kPCMCanID = 50;
+
+	public static int kFrontIntakeEscCanID = 11;
+
+	public static int kFrontIntakeSolenoidChannel = 0;
+
     public static double kDriveMaxSpeed = 4.18;
 	public static double kDriveMaxAccel = 4.0;
 	public static double kDriveMaxTurnSpeed = 12.12;
