@@ -10,7 +10,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.SPI;
@@ -102,8 +101,13 @@ public class Drive extends Subsystems {
             rightDiff = Math.max(rightDiff, -manRampRateRev);
             rightPower = lastRightSPeed + rightDiff;
         }
+
+       //System.out.println("Mode - " + currentMode);
         //set motors
+       // System.out.println("leftpower " + leftPower);
         RobotMap.leftDriveMotors.set(leftPower * Config.kInvertDir);
+
+      // System.out.println("rightpower " + rightPower);
 
         RobotMap.rightDriveMotors.set(rightPower * Config.kInvertDir);
 
@@ -120,37 +124,62 @@ public class Drive extends Subsystems {
         setMotors(leftPower, -rightPower);
     }
 
-    // private void steerPriority(double left, double right)
-    // {
-    //     if (left - right > 2)
-    //     {
-    //         left = 1;
-    //         right = -1;
-    //     }
-    //     else if (right - left > 2)
-    //     {
-    //         left = -1;
-    //         right = 1;
-    //     }
-    //     else if (Math.max(right, left) > 1)
-    //     {
-    //         left = left - (Math.max(right,left) - 1);
-    //         right = right - (Math.max(right,left) - 1);
-    //     }
-    //     else if (Math.min(right, left) < -1)
-    //     {
-    //         left = left - (Math.min(right,left) + 1);
-    //         right = right - (Math.min(right,left) + 1);
-    //     }
-    //     SmartDashboard.putNumber("leftPower", left);
-    //     SmartDashboard.putNumber("rightPower", left);
-    //     SmartDashboard.putNumber("SteerLeft", left-right);
-    //     // leftDrive.set(-left);
-    //     // rightDrive.set(right);
-    //     setMotors(left, -right);
-    // }
+   /**
+    * Drives the robot, calculating other settings
+    *Stall detection disabled currently
+    * @param throttle
+    * @param steering
+    * @param power
+    * @param stallSense
+    */
+    public void smartDrive(double throttle, double steering, double power, boolean stallSense) {
+        double pitch = _imu.getPitch();
+        double stallThreshold = (Config.kStallThreshold);
+        double tipThreshold = (Config.kTipThreshold);
+        if(pitch > tipThreshold && stallSense == true) {
+            setMotors(-Config.kTipCorrectionPower, -Config.kTipCorrectionPower);
+            System.out.println("PITCH > THRESHOLD");
+        } else if(pitch < -tipThreshold && stallSense == true) {
+            setMotors(Config.kTipCorrectionPower, Config.kTipCorrectionPower);
+            System.out.println("PITCH < THRESHOLD");
+        } else {
+            //Normal
+              arcadeDrive(throttle, steering, power);
+        }
+    }
+    /*
+    private void steerPriority(double left, double right)
+    {
+        if (left - right > 2)
+        {
+            left = 1;
+            right = -1;
+        }
+        else if (right - left > 2)
+        {
+            left = -1;
+            right = 1;
+        }
+        else if (Math.max(right, left) > 1)
+        {
+            left = left - (Math.max(right,left) - 1);
+            right = right - (Math.max(right,left) - 1);
+        }
+        else if (Math.min(right, left) < -1)
+        {
+            left = left - (Math.min(right,left) + 1);
+            right = right - (Math.min(right,left) + 1);
+        }
+        SmartDashboard.putNumber("leftPower", left);
+        SmartDashboard.putNumber("rightPower", left);
+        SmartDashboard.putNumber("SteerLeft", left-right);
+        // leftDrive.set(-left);
+        // rightDrive.set(right);
+        setMotors(left, -right);
+    }
 
 
+*/
 
    /**
     * @param targetHeading
@@ -261,6 +290,7 @@ public class Drive extends Subsystems {
 	public boolean getBrakes() {
 		return true;
 	}
+
     @Override
     public boolean initMechanism() {
         // TODO Auto-generated method stub
