@@ -3,7 +3,7 @@ package frc.robot;
 public class Config {
 
     //Version number. Update every pull request or push!
-    public static final String version = "0.1.1";
+    public static final String version = "0.1.2";
     
     //1 = normal, -1 = inverted
     public static final double kInvertDir = 1;
@@ -67,6 +67,16 @@ public class Config {
 
     //Default value for verbose output
     public static final boolean kVerboseOutputDefault = false;
+
+    //Minimum pressure for Compressor cutoff
+    public static final double kCompressorMin = 110;
+
+    //Max pressure for the Compressor cutoff
+    public static final double kCompressorMax = 120;
+
+    //Intake speed
+    public static final double kIntakeSpeed = 1;
+
 
         
 }

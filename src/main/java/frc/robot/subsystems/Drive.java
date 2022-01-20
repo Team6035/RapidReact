@@ -12,12 +12,6 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import frc.robot.Config;
@@ -307,5 +301,14 @@ public class Drive extends Subsystems {
         // TODO Auto-generated method stub
         return null;
     }
-
+    @Override
+    public void initMotorControllers() {
+        // TODO Auto-generated method stub
+        
+    }
+    @Override
+    public diagnosticState test() {
+        
+        return null;
+    }
 }

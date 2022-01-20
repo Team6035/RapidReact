@@ -11,6 +11,14 @@ public class Constants {
     public static int kRightDriveBCanID = 6;
 	public static int kRightDriveCCanID = 7;
 
+	public static int kShooterBottomCanID = 9;
+	public static int kShooterTopCanID = 10;
+
+	public static int kPCMCanID = 50;
+
+	public static int kFrontIntakeEscCanID = 11;
+
+	public static int kFrontIntakeSolenoidChannel = 0;
 
     public static double kDriveMaxSpeed = 4.18;
 	public static double kDriveMaxAccel = 4.0;
@@ -23,5 +31,8 @@ public class Constants {
 	public static final double kGyroDriveTurnKp = 0.012;  // FIXME
 	public static final double kEncoderDriveKp = 0.7;  // FIXME
 	public static final double kDriveEncoderConversionFactor = 0.000023077; //1; //0.00089291;
+
+	public static final double kShooterP = 0.1;
+	public static final double kShooterI = 0.00014;
 
 }
