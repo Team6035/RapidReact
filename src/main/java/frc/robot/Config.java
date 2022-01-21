@@ -77,6 +77,18 @@ public class Config {
     //Intake speed
     public static final double kIntakeSpeed = 1;
 
+    //Climber stowed position
+    public static final double kClimberStowedPos = 0; //in encoder units (2048 EPR)
+
+    //Climber 'Up' position
+    public static final double kClimberUpPos = 100000; //in encoder units (2048 EPR)
+
+    //Climber 'Hooked' position
+    public static final double kClimberHookedPos = 1000; //in encoder units (2048 EPR)
+
+    //Climber hysteresis
+    public static final double kClimberHysteresis = 10; 
+
 
         
 }

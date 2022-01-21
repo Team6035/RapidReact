@@ -82,4 +82,15 @@ public class RobotMap {
 		return frontIntakeSolenoid;
 	}
 
+	static WPI_TalonFX leftWinch = new WPI_TalonFX(Constants.kLeftWinchCanID);
+	static WPI_TalonFX rightWinch = new WPI_TalonFX(Constants.kRightWinchCanID);
+
+	public static WPI_TalonFX getLeftWinch() {
+		return leftWinch;
+	}
+
+	public static WPI_TalonFX getRightWinch() {
+		return rightWinch;
+	}
+
 }
