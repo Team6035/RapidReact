@@ -14,6 +14,10 @@ public class Constants {
 	public static int kShooterBottomCanID = 9;
 	public static int kShooterTopCanID = 10;
 
+	public static final int kLeftWinchCanID = 13;
+	public static final int kRightWinchCanID = 14;
+
+
 	public static int kPCMCanID = 50;
 
 	public static int kFrontIntakeEscCanID = 11;

@@ -74,11 +74,15 @@ public class RobotMap {
 		return frontIntakeSolenoid;
 	}
 
-	static TalonSRX talon1 = new TalonSRX(1);
-	static VictorSPX talon2 = new VictorSPX(2);
-	static VictorSPX talon3 = new VictorSPX(3);
-	static VictorSPX talon4 = new VictorSPX(4);
+	static TalonFX leftWinch = new TalonFX(Constants.kLeftWinchCanID);
+	static TalonFX rightWinch = new TalonFX(Constants.kRightWinchCanID);
 
+	public static TalonFX getLeftWinch() {
+		return leftWinch;
+	}
 
+	public static TalonFX getRightWinch() {
+		return rightWinch;
+	}
 
 }
