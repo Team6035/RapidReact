@@ -1,67 +1,59 @@
 package frc.robot;
 
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 
 public class RobotMap {
 
-	static WPI_TalonFX leftDriveA = new WPI_TalonFX(Constants.kLeftDriveACanID);
-	static WPI_TalonFX leftDriveB = new WPI_TalonFX(Constants.kLeftDriveBCanID);
-	static WPI_TalonFX leftDriveC = new WPI_TalonFX(Constants.kLeftDriveCCanID);
-	public static MotorControllerGroup leftDriveMotors = new MotorControllerGroup(leftDriveA, leftDriveB, leftDriveC);
+	static TalonFX leftDriveA = new TalonFX(Constants.kLeftDriveACanID);
+	static TalonFX leftDriveB = new TalonFX(Constants.kLeftDriveBCanID);
+	static TalonFX leftDriveC = new TalonFX(Constants.kLeftDriveCCanID);
+	//public static MotorControllerGroup leftDriveMotors = new MotorControllerGroup(leftDriveA, leftDriveB, leftDriveC);
 
 
-	static WPI_TalonFX rightDriveA = new WPI_TalonFX(Constants.kRightDriveACanID);
-	static WPI_TalonFX rightDriveB = new WPI_TalonFX(Constants.kRightDriveBCanID);
-	static WPI_TalonFX rightDriveC = new WPI_TalonFX(Constants.kRightDriveCCanID);
-	public static MotorControllerGroup rightDriveMotors = new MotorControllerGroup(rightDriveA, rightDriveB, rightDriveC);
+	static TalonFX rightDriveA = new TalonFX(Constants.kRightDriveACanID);
+	static TalonFX rightDriveB = new TalonFX(Constants.kRightDriveBCanID);
+	static TalonFX rightDriveC = new TalonFX(Constants.kRightDriveCCanID);
+	//public static MotorControllerGroup rightDriveMotors = new MotorControllerGroup(rightDriveA, rightDriveB, rightDriveC);
 
-    
-	public static MotorControllerGroup getLeftDrive() {
-
-		return leftDriveMotors;
-	}
-	public static MotorControllerGroup getRightDrive() {
-
-		return rightDriveMotors;
-	}
-	public static WPI_TalonFX getLeftDriveA() {
+	public static TalonFX getLeftDriveA() {
 		return leftDriveA;
 	}
 
-	public static WPI_TalonFX getRightDriveA() {
+	public static TalonFX getRightDriveA() {
 		return rightDriveA;
 	}
 
-	public static WPI_TalonFX getLeftDriveB() {
+	public static TalonFX getLeftDriveB() {
 		return leftDriveB;
 	}
 
-	public static WPI_TalonFX getRightDriveB() {
+	public static TalonFX getRightDriveB() {
 		return rightDriveB;
 	}
 
-	public static WPI_TalonFX getLeftDriveC() {
+	public static TalonFX getLeftDriveC() {
 		return leftDriveC;
 	}
 
-	public static WPI_TalonFX getRightDriveC() {
+	public static TalonFX getRightDriveC() {
 		return rightDriveC;
 	}
 
-	static WPI_TalonFX shooterBottom = new WPI_TalonFX(Constants.kShooterBottomCanID);
-	static WPI_TalonFX shooterTop = new WPI_TalonFX(Constants.kShooterTopCanID);
+	static TalonFX shooterBottom = new TalonFX(Constants.kShooterBottomCanID);
+	static TalonFX shooterTop = new TalonFX(Constants.kShooterTopCanID);
 
-	public static WPI_TalonFX getShooterBottom() {
+	public static TalonFX getShooterBottom() {
 		return shooterBottom;
 	}
 
-	public static WPI_TalonFX getShooterTop() {
+	public static TalonFX getShooterTop() {
 		return shooterTop;
 	}
 
@@ -71,15 +63,22 @@ public class RobotMap {
 		return compressor;
 	}
 
-	static WPI_TalonFX frontIntakeMotor = new WPI_TalonFX(Constants.kFrontIntakeEscCanID);
+	static TalonFX frontIntakeMotor = new TalonFX(Constants.kFrontIntakeEscCanID);
 	static Solenoid frontIntakeSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.kFrontIntakeSolenoidChannel);
 	
-	public static WPI_TalonFX getFrontIntakeESC() {
+	public static TalonFX getFrontIntakeESC() {
 		return frontIntakeMotor;
 	}
 
 	public static Solenoid getFrontIntakeSolenoid() {
 		return frontIntakeSolenoid;
 	}
+
+	static TalonSRX talon1 = new TalonSRX(1);
+	static VictorSPX talon2 = new VictorSPX(2);
+	static VictorSPX talon3 = new VictorSPX(3);
+	static VictorSPX talon4 = new VictorSPX(4);
+
+
 
 }

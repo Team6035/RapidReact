@@ -47,6 +47,7 @@ public class DriverInterface {
         RELEASE,
     }
 
+
     boolean debugOutput = Config.kDebugOutputDefault;
     boolean verboseOutput = Config.kVerboseOutputDefault;
 
@@ -156,6 +157,14 @@ public class DriverInterface {
 
     public double getY() {
         return deadZone(getJoystickAxis(JoystickAxisType.Y));
+    }
+
+    public boolean getShootCommand() {
+        return joystick1.getTrigger();
+    }
+
+    public boolean getIntakeCommand() {
+        return joystick1.getRawButton(2);
     }
 
 

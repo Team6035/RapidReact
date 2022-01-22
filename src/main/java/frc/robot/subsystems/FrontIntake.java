@@ -12,14 +12,28 @@ import frc.robot.RobotMap;
 /** Add your docs here. */
 public class FrontIntake extends Subsystems{
 
-    public static enum IntakeStates {
+    public static enum FrontIntakeStates {
         STOWED,
         INTAKING,
         UNINTAKING,
     }
 
-    private IntakeStates currentState = IntakeStates.STOWED;
-    private IntakeStates desiredState = IntakeStates.STOWED;
+    private FrontIntakeStates currentState = FrontIntakeStates.STOWED;
+    private FrontIntakeStates desiredState = FrontIntakeStates.STOWED;
+    
+    public FrontIntake() {
+
+    }
+
+    private static FrontIntake m_instance;
+
+    public static FrontIntake getInstance() {
+        if(m_instance == null) {
+            m_instance = new FrontIntake();
+        }
+
+        return m_instance;
+    }
 
     @Override
     public void update() {
@@ -83,14 +97,14 @@ public class FrontIntake extends Subsystems{
     /**
      * @return The current state of the intakes
      */
-    public IntakeStates getCurrentState() {
+    public FrontIntakeStates getCurrentState() {
         return currentState;
     }
 
     /**
      * @param State to become the intake desired state.
      */
-    public void setDesiredState(IntakeStates state) {
+    public void setDesiredState(FrontIntakeStates state) {
         desiredState = state;
     }
 

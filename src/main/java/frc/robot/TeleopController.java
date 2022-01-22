@@ -6,6 +6,8 @@ package frc.robot;
 
 import frc.robot.DriverInterface.JoystickAxisType;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.FrontIntake.FrontIntakeStates;
+import frc.robot.subsystems.Shooter.ShooterState;
 
 /** Add your docs here. */
 public class TeleopController {
@@ -15,16 +17,40 @@ public class TeleopController {
     private static Pneumatics m_pneumatics;
     private static Shooter m_shooter;
     private static DriverInterface m_driverInterface;
+    private static TeleopController m_instance;
 
     private TeleopController() {
         m_driverInterface = new DriverInterface();
         m_drive = Drive.getInstance();
         m_pneumatics = Pneumatics.getInstance();
         m_shooter = Shooter.getInstance();
+        m_frontIntake = FrontIntake.getInstance();
+
+    }
+
+    public static TeleopController getInstance() {
+        if(m_instance == null) {
+            m_instance = new TeleopController();
+        }
+        return m_instance;
 
     }
 
     public void callTeleopController() {
+
+        if(m_driverInterface.getShootCommand()) {
+            m_shooter.setDesiredState(ShooterState.SHOOTING);
+        } else {
+            m_shooter.setDesiredState(ShooterState.IDLE);
+        }
+
+        if(m_driverInterface.getIntakeCommand()) {
+            m_frontIntake.setDesiredState(FrontIntakeStates.INTAKING);
+        } else {
+            m_frontIntake.setDesiredState(FrontIntakeStates.STOWED);
+        }
+
+        callDrive();
 
     }
 

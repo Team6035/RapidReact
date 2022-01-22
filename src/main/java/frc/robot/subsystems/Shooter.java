@@ -27,13 +27,14 @@ public class Shooter extends Subsystems{
         EJECT, //shooter ejecting wrong ball colour
     }
 
+
     private static ShooterState currentState = ShooterState.IDLE;
     private static ShooterState desiredState = ShooterState.IDLE;
 
     private static ShooterSpeedSlot speedSlot = ShooterSpeedSlot.IDLE;
 
     private double shooterIdleSpeed = 0;
-    private double shooterShootSpeed = 1000;
+    private double shooterShootSpeed = -2500;
     private double shooterEjectSpeed = 100;
 
     private double ratio = 1;
@@ -163,9 +164,15 @@ public class Shooter extends Subsystems{
     }
 
     private void shooterPID() {
-        RobotMap.getShooterBottom().set(ControlMode.Velocity, getShooterSetSpeed(speedSlot));
-        RobotMap.getShooterTop().set(ControlMode.Velocity, getShooterSetSpeed(speedSlot) * ratio * wheelRatio);
+        if(getShooterSetSpeed() == 0) {
+            RobotMap.getShooterBottom().neutralOutput();
+            RobotMap.getShooterTop().neutralOutput();
+        } else {
+            RobotMap.getShooterBottom().set(ControlMode.Velocity, getShooterSetSpeed(speedSlot) / 1200 * 2048);
+            RobotMap.getShooterTop().set(ControlMode.Velocity, getShooterSetSpeed(speedSlot) * ratio * wheelRatio / 1200 * 2048);
+        }
 
+        
     }
 
     @Override
@@ -180,5 +187,13 @@ public class Shooter extends Subsystems{
         }
         return m_instance;
     }
-    
+
+    public void setDesiredState(ShooterState state) {
+        desiredState = state;
+    }
+
+    public ShooterState getCurrentState() {
+        return currentState;
+    }
+     
 }

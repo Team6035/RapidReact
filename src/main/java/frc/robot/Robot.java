@@ -4,10 +4,12 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.*;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -22,6 +24,12 @@ public class Robot extends TimedRobot {
 
   Drive drivetrain = Drive.getInstance();
   static DriverInterface m_driverInterface = new DriverInterface();
+
+  static Pneumatics m_pneumatics;
+  static Shooter m_shooter;
+  static Drive m_drive;
+  static FrontIntake m_frontIntake;
+  static TeleopController m_teleopController;
 
 
   /**
@@ -89,6 +97,12 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    Shooter.getInstance().update();
+    Pneumatics.getInstance().update();
+    Drive.getInstance().update();
+    TeleopController.getInstance().callTeleopController();
+    FrontIntake.getInstance().update();
+
   }
 
   /** This function is called once when the robot is disabled. */
