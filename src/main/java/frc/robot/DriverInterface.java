@@ -81,7 +81,7 @@ public class DriverInterface {
                 joystickAxisReturn = joystick1.getY();
             break;
             case THROTTLE:
-                joystickAxisReturn = joystick1.getThrottle();
+                joystickAxisReturn = (joystick1.getThrottle() + 1)/2;
             break;
             case ROTATION:
                 joystickAxisReturn = joystick1.getTwist();
@@ -141,6 +141,21 @@ public class DriverInterface {
             break;
 
         }
+    }
+
+    public double deadZone(double input) {
+        if(input <= 0.05 && input >= -0.05) {
+            input = 0;
+        }
+        return input;
+    }
+
+    public double getX() {
+        return deadZone(getJoystickAxis(JoystickAxisType.X));
+    }
+
+    public double getY() {
+        return deadZone(getJoystickAxis(JoystickAxisType.Y));
     }
 
 

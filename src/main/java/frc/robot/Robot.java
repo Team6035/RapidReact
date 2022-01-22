@@ -21,7 +21,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   Drive drivetrain = Drive.getInstance();
-  static DriverControls m_controls = new DriverControls();
+  static DriverInterface m_driverInterface = new DriverInterface();
 
 
   /**
@@ -89,7 +89,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    
   }
 
   /** This function is called once when the robot is disabled. */

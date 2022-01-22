@@ -13,6 +13,8 @@ import frc.robot.RobotMap;
 /** Add your docs here. */
 public class Shooter extends Subsystems{
 
+    private static Shooter m_instance;
+
     public enum ShooterSpeedSlot {
         IDLE, //Shooter in idle state
         SHOOTING, //shooter shooting ball
@@ -170,6 +172,13 @@ public class Shooter extends Subsystems{
     public diagnosticState test() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    public static Shooter getInstance() {
+        if(m_instance == null) {
+            m_instance = new Shooter();
+        }
+        return m_instance;
     }
     
 }

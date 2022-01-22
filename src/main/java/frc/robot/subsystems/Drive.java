@@ -115,13 +115,17 @@ public class Drive extends Subsystems {
         lastRightSPeed = rightPower;
     }
 
-    public void arcadeDrive(double throttle, double steering, double power) {
+    public void arcadeDrive(double throttle, double steering, double power, double microAdjust) {
         //Left
-        double leftPower = (power + steering) * throttle;
+        double leftPower = (power + (steering + microAdjust)) * throttle;
         //Right
-        double rightPower = (power - steering) * throttle;
+        double rightPower = (power - (steering + microAdjust)) * throttle;
         //Write to motors
         setMotors(leftPower, -rightPower);
+    }
+
+    public void arcadeDrive(double throttle, double steering, double power) {
+        arcadeDrive(throttle, steering, power, 0);
     }
 
    /**
@@ -134,7 +138,7 @@ public class Drive extends Subsystems {
     */
     public void smartDrive(double throttle, double steering, double power, boolean stallSense) {
         double pitch = _imu.getPitch();
-        double stallThreshold = (Config.kStallThreshold);
+        //double stallThreshold = (Config.kStallThreshold);
         double tipThreshold = (Config.kTipThreshold);
         if(pitch > tipThreshold && stallSense == true) {
             setMotors(-Config.kTipCorrectionPower, -Config.kTipCorrectionPower);
