@@ -8,6 +8,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import frc.robot.Constants;
+import frc.robot.DriverInterface;
 import frc.robot.RobotMap;
 
 /** Add your docs here. */
@@ -43,22 +44,25 @@ public class Shooter extends Subsystems{
     @Override
     public void update() {
 
+        DriverInterface.getInstance().outputShooterRPMField(RobotMap.getShooterBottom().getSelectedSensorVelocity() / 2048 * 1200);
+
         switch(currentState) {
             default: //catches 'IDLE'
-                setShooterSpeedSlot(ShooterSpeedSlot.IDLE);
+                stopShoter();
                 currentState = desiredState;
             break;
             case SHOOTING:
                 setShooterSpeedSlot(ShooterSpeedSlot.SHOOTING);
+                shooterPID();
                 currentState = desiredState;
             break;
             case EJECT:
                 setShooterSpeedSlot(ShooterSpeedSlot.EJECT);
+                shooterPID();
                 currentState = desiredState;
             break;
         }
 
-        shooterPID();
     }
 
     @Override
@@ -82,13 +86,17 @@ public class Shooter extends Subsystems{
     @Override
     public void initMotorControllers() {
         RobotMap.getShooterBottom().configFactoryDefault();
-        RobotMap.getShooterTop().configFactoryDefault();
+        RobotMap.getShooterTop ().configFactoryDefault();
 
         RobotMap.getShooterBottom().config_kP(0, Constants.kShooterP);       
         RobotMap.getShooterTop().config_kP(0, Constants.kShooterP);       
 
         RobotMap.getShooterBottom().config_kI(0, Constants.kShooterI);       
         RobotMap.getShooterTop().config_kI(0, Constants.kShooterI);     
+
+        RobotMap.getShooterBottom().setInverted(true);
+        RobotMap.getShooterTop().setInverted(true);
+
     }
 
     public void setShooterSpeed(ShooterSpeedSlot speedSlot, double rpm) {
@@ -167,13 +175,10 @@ public class Shooter extends Subsystems{
     }
 
     private void shooterPID() {
-        if(getShooterSetSpeed() == 0) {
-            RobotMap.getShooterBottom().neutralOutput();
-            RobotMap.getShooterTop().neutralOutput();
-        } else {
-            RobotMap.getShooterBottom().set(ControlMode.Velocity, getShooterSetSpeed(speedSlot) / 1200 * 2048);
-            RobotMap.getShooterTop().set(ControlMode.Velocity, getShooterSetSpeed(speedSlot) * ratio * wheelRatio / 1200 * 2048);
-        }
+        
+            RobotMap.getShooterBottom().set(ControlMode.Velocity, (getShooterSetSpeed(speedSlot) / 1200 * 2048));
+            RobotMap.getShooterTop().set(ControlMode.Velocity, (getShooterSetSpeed(speedSlot) * ratio * wheelRatio / 1200 * 2048));
+        
 
         
     }
@@ -197,6 +202,12 @@ public class Shooter extends Subsystems{
 
     public ShooterState getCurrentState() {
         return currentState;
+    }
+
+    public void stopShoter() {
+        RobotMap.getShooterBottom().set(ControlMode.PercentOutput, 0);
+        RobotMap.getShooterTop().set(ControlMode.PercentOutput, 0);
+
     }
      
 }

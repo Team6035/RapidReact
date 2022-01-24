@@ -219,5 +219,9 @@ public class DriverInterface {
         return SmartDashboard.getNumber("Shooter target", Shooter.getInstance().getShooterSetSpeed());
     }
 
+    public void outputShooterRPMField(double rpm) {
+        SmartDashboard.putNumber("Shooter RPM", rpm);
+    }
+
 
 }

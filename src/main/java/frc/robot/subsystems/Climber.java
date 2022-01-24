@@ -7,9 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import frc.robot.Config;
-import frc.robot.DriverInterface;
 import frc.robot.RobotMap;
-import frc.robot.DriverInterface.MessageType;
 
 /** Add your docs here. */
 public class Climber extends Subsystems {
@@ -53,7 +51,6 @@ public class Climber extends Subsystems {
     @Override
     public void update() {
 
-        DriverInterface.getInstance().consoleOutput(MessageType.WARNING, RobotMap.getLeftWinch().getSelectedSensorPosition() + "," + RobotMap.getRightWinch().getSelectedSensorPosition());
 
         switch(currentClimberState) {
             default: //stowed
