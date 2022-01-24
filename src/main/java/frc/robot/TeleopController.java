@@ -4,5 +4,73 @@
 
 package frc.robot;
 
+import frc.robot.DriverInterface.JoystickAxisType;
+import frc.robot.DriverInterface.MessageType;
+import frc.robot.subsystems.*;
+import frc.robot.subsystems.Climber.ClimberStates;
+import frc.robot.subsystems.FrontIntake.FrontIntakeStates;
+import frc.robot.subsystems.Shooter.ShooterSpeedSlot;
+import frc.robot.subsystems.Shooter.ShooterState;
+
 /** Add your docs here. */
-public class TeleopController {}
+public class TeleopController {
+
+    private static Drive m_drive;
+    private static FrontIntake m_frontIntake;
+    private static Pneumatics m_pneumatics;
+    private static Shooter m_shooter;
+    private static DriverInterface m_driverInterface;
+    private static TeleopController m_instance;
+    private static Climber m_climber;
+
+    private TeleopController() {
+        m_driverInterface = new DriverInterface();
+        m_drive = Drive.getInstance();
+        m_pneumatics = Pneumatics.getInstance();
+        m_shooter = Shooter.getInstance();
+        m_frontIntake = FrontIntake.getInstance();
+        m_climber = Climber.getInstance();
+
+    }
+
+    public static TeleopController getInstance() {
+        if(m_instance == null) {
+            m_instance = new TeleopController();
+        }
+        return m_instance;
+
+    }
+
+    public void callTeleopController() {
+
+        if(m_driverInterface.getShootCommand()) {
+            m_shooter.setDesiredState(ShooterState.SHOOTING);
+        } else {
+            m_shooter.setDesiredState(ShooterState.IDLE);
+        }
+
+        if(m_driverInterface.getIntakeCommand()) {
+            m_frontIntake.setDesiredState(FrontIntakeStates.INTAKING);
+        } else {
+            m_frontIntake.setDesiredState(FrontIntakeStates.STOWED);
+        }
+
+        if(m_driverInterface.getClimbAdvanceCommand()) {
+            m_climber.setClimberDesiredState(ClimberStates.EXTENDED);
+            m_driverInterface.consoleOutput(MessageType.WARNING, "clib");
+        }
+
+        callDrive();
+        m_pneumatics.setCompressorStatus(true);
+
+        //Update shooter values
+        m_shooter.setShooterSpeed(ShooterSpeedSlot.SHOOTING, m_driverInterface.getShooterSpeedField());
+
+    }
+
+    public void callDrive() {
+        m_drive.arcadeDrive(m_driverInterface.getJoystickAxis(JoystickAxisType.THROTTLE), m_driverInterface.getX(), m_driverInterface.getY(), m_driverInterface.getJoystickAxis(JoystickAxisType.ROTATION) * 0.1);
+    }
+
+
+}

@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.RelativeEncoder;
@@ -105,23 +106,31 @@ public class Drive extends Subsystems {
        //System.out.println("Mode - " + currentMode);
         //set motors
        // System.out.println("leftpower " + leftPower);
-        RobotMap.leftDriveMotors.set(leftPower * Config.kInvertDir);
+        RobotMap.getLeftDriveA().set(ControlMode.PercentOutput, leftPower * Config.kInvertDir);
+        RobotMap.getLeftDriveB().set(ControlMode.PercentOutput, leftPower * Config.kInvertDir);
+
 
       // System.out.println("rightpower " + rightPower);
 
-        RobotMap.rightDriveMotors.set(rightPower * Config.kInvertDir);
+        RobotMap.getRightDriveA().set(ControlMode.PercentOutput, rightPower * Config.kInvertDir);
+        RobotMap.getRightDriveB().set(ControlMode.PercentOutput, rightPower * Config.kInvertDir);
+
 
         lastLeftSPeed = leftPower;
         lastRightSPeed = rightPower;
     }
 
-    public void arcadeDrive(double throttle, double steering, double power) {
+    public void arcadeDrive(double throttle, double steering, double power, double microAdjust) {
         //Left
-        double leftPower = (power + steering) * throttle;
+        double leftPower = (power + (steering + microAdjust)) * throttle;
         //Right
-        double rightPower = (power - steering) * throttle;
+        double rightPower = (power - (steering + microAdjust)) * throttle;
         //Write to motors
         setMotors(leftPower, -rightPower);
+    }
+
+    public void arcadeDrive(double throttle, double steering, double power) {
+        arcadeDrive(throttle, steering, power, 0);
     }
 
    /**
@@ -134,7 +143,7 @@ public class Drive extends Subsystems {
     */
     public void smartDrive(double throttle, double steering, double power, boolean stallSense) {
         double pitch = _imu.getPitch();
-        double stallThreshold = (Config.kStallThreshold);
+        //double stallThreshold = (Config.kStallThreshold);
         double tipThreshold = (Config.kTipThreshold);
         if(pitch > tipThreshold && stallSense == true) {
             setMotors(-Config.kTipCorrectionPower, -Config.kTipCorrectionPower);

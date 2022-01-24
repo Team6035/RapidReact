@@ -4,12 +4,15 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.VisionTrack;
 
+import frc.robot.subsystems.*;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -22,7 +25,15 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  static DriverControls m_controls = new DriverControls();
+  Drive drivetrain = Drive.getInstance();
+  static DriverInterface m_driverInterface = new DriverInterface();
+
+  static Pneumatics m_pneumatics;
+  static Shooter m_shooter;
+  static Drive m_drive;
+  static FrontIntake m_frontIntake;
+  static TeleopController m_teleopController;
+  static Climber m_Climber;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -30,9 +41,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    DriverInterface.getInstance().initSmartDashboard();
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    Shooter.getInstance().initMotorControllers();
   }
 
   /**
@@ -47,6 +60,7 @@ public class Robot extends TimedRobot {
     if (isEnabled() && !Drive.getInstance().getBrakes()) { // set to brake when enabled if not already set to brake
       Drive.getInstance().setBrakes(true);
     }
+    DriverInterface.getInstance().update();
   }
 
   /**
@@ -84,17 +98,22 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
 
+    Climber.getInstance().resetSensors();
+
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    if(m_controls.getVisionCommand()){
-      VisionTrack.getInstance().turnToTarget();
-    }
-    else{
-      Drive.getInstance().arcadeDrive(m_controls.getDriveThrottle(), m_controls.getDriveSteering(), m_controls.getDrivePower());
-    }
+    RobotMap.getLeftWinch().set(ControlMode.MotionMagic, 1000000);
+
+    Shooter.getInstance().update();
+    Pneumatics.getInstance().update();
+    Drive.getInstance().update();
+    TeleopController.getInstance().callTeleopController();
+    FrontIntake.getInstance().update();
+    Climber.getInstance().update();
+
   }
 
   /** This function is called once when the robot is disabled. */

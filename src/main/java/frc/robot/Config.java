@@ -66,7 +66,7 @@ public class Config {
     public static final boolean kDebugOutputDefault = false;
 
     //Default value for verbose output
-    public static final boolean kVerboseOutputDefault = false;
+    public static final boolean kVerboseOutputDefault = true;
 
     //Minimum pressure for Compressor cutoff
     public static final double kCompressorMin = 110;
@@ -76,6 +76,18 @@ public class Config {
 
     //Intake speed
     public static final double kIntakeSpeed = 1;
+
+    //Climber stowed position
+    public static final double kClimberStowedPos = 0; //in encoder units (2048 EPR)
+
+    //Climber 'Up' position
+    public static final double kClimberUpPos = 200000; //in encoder units (2048 EPR)
+
+    //Climber 'Hooked' position
+    public static final double kClimberHookedPos = 100000; //in encoder units (2048 EPR)
+
+    //Climber hysteresis
+    public static final double kClimberHysteresis = 10; 
 
 
         

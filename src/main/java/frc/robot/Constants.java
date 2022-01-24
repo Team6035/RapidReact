@@ -14,6 +14,10 @@ public class Constants {
 	public static int kShooterBottomCanID = 9;
 	public static int kShooterTopCanID = 10;
 
+	public static final int kLeftWinchCanID = 13;
+	public static final int kRightWinchCanID = 14;
+
+
 	public static int kPCMCanID = 50;
 
 	public static int kFrontIntakeEscCanID = 11;
@@ -32,7 +36,9 @@ public class Constants {
 	public static final double kEncoderDriveKp = 0.7;  // FIXME
 	public static final double kDriveEncoderConversionFactor = 0.000023077; //1; //0.00089291;
 
-	public static final double kShooterP = 0.1;
+	public static final double kShooterP = 0.25;
 	public static final double kShooterI = 0.00014;
+
+	public static final double kClimberWinchAP = 0.0623;
 
 }
