@@ -7,9 +7,9 @@ package frc.robot;
 import frc.robot.DriverInterface.JoystickAxisType;
 import frc.robot.DriverInterface.MessageType;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.Climber.ClimberBarStates;
 import frc.robot.subsystems.Climber.ClimberStates;
 import frc.robot.subsystems.FrontIntake.FrontIntakeStates;
+import frc.robot.subsystems.Shooter.ShooterSpeedSlot;
 import frc.robot.subsystems.Shooter.ShooterState;
 
 /** Add your docs here. */
@@ -62,6 +62,9 @@ public class TeleopController {
 
         callDrive();
         m_pneumatics.setCompressorStatus(true);
+
+        //Update shooter values
+        m_shooter.setShooterSpeed(ShooterSpeedSlot.SHOOTING, m_driverInterface.getShooterSpeedField());
 
     }
 

@@ -7,12 +7,18 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Shooter;
 
 /** Add your docs here. */
 public class DriverInterface {
 
     private static DriverInterface m_instance;
+
+    private final SendableChooser<String> verboseOutputChooser = new SendableChooser<>();
+
 
     public DriverInterface() {
         
@@ -169,6 +175,48 @@ public class DriverInterface {
 
     public boolean getClimbAdvanceCommand() {
         return joystick1.getRawButton(11) && joystick1.getRawButton(12);
+
+    }
+
+    public void update() {
+        Shuffleboard.update();
+        SmartDashboard.updateValues();
+
+        switch(verboseOutputChooser.getSelected()) {
+            default:
+                verboseOutput = false;
+                debugOutput = false;
+            break;
+            case "DEBUG": 
+                verboseOutput = false;
+                debugOutput = true;
+            break;
+            case "VERBOSE":
+                verboseOutput = true;
+                debugOutput = false;
+            break;
+            case "ALL":
+                verboseOutput = true;
+                debugOutput = true;
+        }
+    }
+
+    //SmartDashboard (shuffleboard) commands
+
+    public void initSmartDashboard() {
+        Shuffleboard.update();
+        SmartDashboard.putNumber("Shooter target", Shooter.getInstance().getShooterSetSpeed());
+        verboseOutputChooser.setDefaultOption("None", "NONE");
+        verboseOutputChooser.addOption("Verbose only", "VERBOSE");
+        verboseOutputChooser.addOption("Debug only", "DEBUG");
+        verboseOutputChooser.addOption("Verbose + Debug", "ALL");
+        SmartDashboard.putData("Verbose Output", verboseOutputChooser);
+
+
+    }
+
+    public double getShooterSpeedField() {
+        return SmartDashboard.getNumber("Shooter target", Shooter.getInstance().getShooterSetSpeed());
     }
 
 

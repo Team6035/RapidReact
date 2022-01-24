@@ -34,7 +34,7 @@ public class Shooter extends Subsystems{
     private static ShooterSpeedSlot speedSlot = ShooterSpeedSlot.IDLE;
 
     private double shooterIdleSpeed = 0;
-    private double shooterShootSpeed = -2500;
+    private double shooterShootSpeed = 2500;
     private double shooterEjectSpeed = 100;
 
     private double ratio = 1;
@@ -81,6 +81,9 @@ public class Shooter extends Subsystems{
 
     @Override
     public void initMotorControllers() {
+        RobotMap.getShooterBottom().configFactoryDefault();
+        RobotMap.getShooterTop().configFactoryDefault();
+
         RobotMap.getShooterBottom().config_kP(0, Constants.kShooterP);       
         RobotMap.getShooterTop().config_kP(0, Constants.kShooterP);       
 

@@ -39,6 +39,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    DriverInterface.getInstance().initSmartDashboard();
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
@@ -56,6 +57,7 @@ public class Robot extends TimedRobot {
     if (isEnabled() && !Drive.getInstance().getBrakes()) { // set to brake when enabled if not already set to brake
       Drive.getInstance().setBrakes(true);
     }
+    DriverInterface.getInstance().update();
   }
 
   /**
