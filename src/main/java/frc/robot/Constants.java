@@ -3,9 +3,9 @@ package frc.robot;
 
 public class Constants {
 
-    public static int kLeftDriveACanID = 41;
-    public static int kLeftDriveBCanID = 42;
-	public static int kLeftDriveCCanID = 43;
+    public static int kLeftDriveACanID = 1;
+    public static int kLeftDriveBCanID = 2;
+	public static int kLeftDriveCCanID = 3;
 
     public static int kRightDriveACanID = 5;
     public static int kRightDriveBCanID = 6;
@@ -38,5 +38,7 @@ public class Constants {
 
 	public static final double kShooterP = 0.25;
 	public static final double kShooterI = 0.00014;
+
+	public static final double kClimberWinchAP = 0.0623;
 
 }
