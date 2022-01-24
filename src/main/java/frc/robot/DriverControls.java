@@ -39,7 +39,7 @@ public double deadZoneX(double input) {
 	 * @return Y from -1 to 1.
 	 */
 	public double getDrivePower() {
-        power = -(deadZoneY(stick.getY()));
+        power = (deadZoneY(stick.getY()));
        return power;
 
     }
@@ -59,6 +59,13 @@ public double deadZoneX(double input) {
    public double getDriveThrottle() {
        return ((-stick.getThrottle() + 1) / 2);
    }
-
+   
+   public boolean getVisionCommand() {
+    if(stick.getRawButton(2)) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 }

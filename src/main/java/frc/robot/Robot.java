@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.VisionTrack;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -20,9 +22,7 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  Drive drivetrain = Drive.getInstance();
   static DriverControls m_controls = new DriverControls();
-
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -89,7 +89,12 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    
+    if(m_controls.getVisionCommand()){
+      VisionTrack.getInstance().turnToTarget();
+    }
+    else{
+      Drive.getInstance().arcadeDrive(m_controls.getDriveThrottle(), m_controls.getDriveSteering(), m_controls.getDrivePower());
+    }
   }
 
   /** This function is called once when the robot is disabled. */
