@@ -5,7 +5,10 @@
 package frc.robot;
 
 import frc.robot.DriverInterface.JoystickAxisType;
+import frc.robot.DriverInterface.MessageType;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Climber.ClimberBarStates;
+import frc.robot.subsystems.Climber.ClimberStates;
 import frc.robot.subsystems.FrontIntake.FrontIntakeStates;
 import frc.robot.subsystems.Shooter.ShooterState;
 
@@ -18,6 +21,7 @@ public class TeleopController {
     private static Shooter m_shooter;
     private static DriverInterface m_driverInterface;
     private static TeleopController m_instance;
+    private static Climber m_climber;
 
     private TeleopController() {
         m_driverInterface = new DriverInterface();
@@ -25,6 +29,7 @@ public class TeleopController {
         m_pneumatics = Pneumatics.getInstance();
         m_shooter = Shooter.getInstance();
         m_frontIntake = FrontIntake.getInstance();
+        m_climber = Climber.getInstance();
 
     }
 
@@ -50,7 +55,13 @@ public class TeleopController {
             m_frontIntake.setDesiredState(FrontIntakeStates.STOWED);
         }
 
+        if(m_driverInterface.getClimbAdvanceCommand()) {
+            m_climber.setClimberDesiredState(ClimberStates.EXTENDED);
+            m_driverInterface.consoleOutput(MessageType.WARNING, "clib");
+        }
+
         callDrive();
+        m_pneumatics.setCompressorStatus(true);
 
     }
 

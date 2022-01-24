@@ -30,6 +30,7 @@ public class Robot extends TimedRobot {
   static Drive m_drive;
   static FrontIntake m_frontIntake;
   static TeleopController m_teleopController;
+  static Climber m_Climber;
 
 
   /**
@@ -92,16 +93,21 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
 
+    Climber.getInstance().resetSensors();
+
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    RobotMap.getLeftWinch().set(ControlMode.MotionMagic, 1000000);
+
     Shooter.getInstance().update();
     Pneumatics.getInstance().update();
     Drive.getInstance().update();
     TeleopController.getInstance().callTeleopController();
     FrontIntake.getInstance().update();
+    Climber.getInstance().update();
 
   }
 
