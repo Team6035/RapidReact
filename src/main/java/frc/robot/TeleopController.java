@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.DriverInterface.JoystickAxisType;
 import frc.robot.DriverInterface.MessageType;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Climber.ClimberBarStates;
 import frc.robot.subsystems.Climber.ClimberStates;
 import frc.robot.subsystems.FrontIntake.FrontIntakeStates;
 import frc.robot.subsystems.Shooter.ShooterSpeedSlot;
@@ -55,9 +56,21 @@ public class TeleopController {
             m_frontIntake.setDesiredState(FrontIntakeStates.STOWED);
         }
 
-        if(m_driverInterface.getClimbAdvanceCommand()) {
-            m_climber.setClimberDesiredState(ClimberStates.EXTENDED);
+        m_driverInterface.consoleOutput(MessageType.CRITICAL, m_climber.getClimberBarCurrentState().toString());
+        if(m_driverInterface.getClimbAdvanceCommand() && m_climber.getClimberBarCurrentState() == ClimberBarStates.LOW && m_climber.getClimberDone()) {
+
+            m_climber.setClimberBarDesiredState(ClimberBarStates.MEDIUM);
             m_driverInterface.consoleOutput(MessageType.WARNING, "clib");
+
+        } else if(m_driverInterface.getClimbAdvanceCommand()) { //is the climber not on any bar?
+
+            m_climber.setClimberBarDesiredState(ClimberBarStates.LOW);
+        }
+
+        if(m_driverInterface.getClimbUpCommand()) {
+            m_climber.setClimberDesiredState(ClimberStates.EXTENDED);
+        } else if(m_driverInterface.getClimbDownCommand()) {
+            m_climber.setClimberDesiredState(ClimberStates.HOOKED);
         }
 
         callDrive();
