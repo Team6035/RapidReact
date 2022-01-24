@@ -96,6 +96,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
 
     Climber.getInstance().resetSensors();
+    DriverInterface.getInstance().printVersionNumber(Config.versionType, Config.version);
 
   }
 
