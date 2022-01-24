@@ -120,18 +120,25 @@ public class Drive extends Subsystems {
         lastRightSPeed = rightPower;
     }
 
-    public void arcadeDrive(double throttle, double steering, double power, double microAdjust) {
+    public void arcadeDrive(double throttle, double steering, double power) {
+       /* double steerDiff = steering - lastSteer;
+        steerDiff = Math.min(steerDiff,0.1);
+        steerDiff = Math.max(steerDiff,-0.1);
+        lastSteer = lastSteer + steerDiff;
+        double powderDiff = power - lastPower;
+        powderDiff -
+        */
         //Left
-        double leftPower = (power + (steering + microAdjust)) * throttle;
+        double leftPower = (power + steering) * throttle;
         //Right
-        double rightPower = (power - (steering + microAdjust)) * throttle;
-        //Write to motors
-        setMotors(leftPower, -rightPower);
+        double rightPower = (power - steering) * throttle;
+        //Write to mo   tors
+        //setMotors(leftPower, -rightPower);
+        RobotMap.leftDriveMotors.set(leftPower * Config.kInvertDir);
+        RobotMap.rightDriveMotors.set(-rightPower * Config.kInvertDir);
+
     }
 
-    public void arcadeDrive(double throttle, double steering, double power) {
-        arcadeDrive(throttle, steering, power, 0);
-    }
 
    /**
     * Drives the robot, calculating other settings

@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.VisionTrack;
-
+import frc.robot.subsystems.VisionTrack.VisionState;
 import frc.robot.subsystems.*;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -109,7 +109,10 @@ public class Robot extends TimedRobot {
 
     Shooter.getInstance().update();
     Pneumatics.getInstance().update();
+    if(VisionTrack.getInstance().getCurrentState() == VisionState.IDLE){
     Drive.getInstance().update();
+    }
+    //Drive.getInstance().arcadeDrive(1, 1, 0);
     TeleopController.getInstance().callTeleopController();
     FrontIntake.getInstance().update();
     Climber.getInstance().update();
@@ -119,7 +122,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    VisionTrack.getInstance().setDesiredState(VisionState.IDLE);
+  }
 
   /** This function is called periodically when disabled. */
   @Override

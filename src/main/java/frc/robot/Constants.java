@@ -41,4 +41,10 @@ public class Constants {
 
 	public static final double kClimberWinchP = 0.0623;
 
+
+	
+	//Vision
+	public static final double kA1 = 20; // Angle of the limelight from the robot chassie (degrees)
+	public static final double kH1 = 0.65; //Height of the limelight lense (metres)
+	public static final double kH2 = 2.61; //height of the middle of the target (metres)
 }
