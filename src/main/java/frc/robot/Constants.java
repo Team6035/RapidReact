@@ -5,17 +5,17 @@ public class Constants {
 
     public static int kLeftDriveACanID = 1;
     public static int kLeftDriveBCanID = 2;
-	public static int kLeftDriveCCanID = 3;
+	public static int kLeftDriveCCanID = 33;
 
-    public static int kRightDriveACanID = 5;
-    public static int kRightDriveBCanID = 6;
-	public static int kRightDriveCCanID = 7;
+    public static int kRightDriveACanID = 3;
+    public static int kRightDriveBCanID = 4;
+	public static int kRightDriveCCanID = 37;
 
 	public static int kShooterBottomCanID = 9;
 	public static int kShooterTopCanID = 10;
 
-	public static final int kLeftWinchCanID = 13;
-	public static final int kRightWinchCanID = 14;
+	public static final int kLeftWinchCanID = 113;
+	public static final int kRightWinchCanID = 114;
 
 
 	public static int kPCMCanID = 50;
@@ -39,6 +39,6 @@ public class Constants {
 	public static final double kShooterP = 0.25;
 	public static final double kShooterI = 0.00014;
 
-	public static final double kClimberWinchAP = 0.0623;
+	public static final double kClimberWinchP = 0.0623;
 
 }

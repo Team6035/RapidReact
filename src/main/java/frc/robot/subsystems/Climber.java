@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import frc.robot.Config;
+import frc.robot.Constants;
 import frc.robot.RobotMap;
 
 /** Add your docs here. */
@@ -55,8 +56,8 @@ public class Climber extends Subsystems {
         switch(currentClimberState) {
             default: //stowed
                 stateFinished = false;
-                RobotMap.getLeftWinch().set(ControlMode.MotionMagic, Config.kClimberStowedPos);
-                RobotMap.getRightWinch().set(ControlMode.MotionMagic, Config.kClimberStowedPos);
+                RobotMap.getLeftWinch().set(ControlMode.Position, Config.kClimberStowedPos);
+                RobotMap.getRightWinch().set(ControlMode.Position, Config.kClimberStowedPos);
             
                 if(RobotMap.getLeftWinch().getSelectedSensorPosition() <= Config.kClimberStowedPos + Config.kClimberHysteresis && RobotMap.getRightWinch().getSelectedSensorPosition() <= Config.kClimberStowedPos + Config.kClimberHysteresis) {
                     stateFinished = true;
@@ -65,8 +66,8 @@ public class Climber extends Subsystems {
             break;
             case EXTENDED:
                 stateFinished = false;
-                RobotMap.getLeftWinch().set(ControlMode.MotionMagic, Config.kClimberUpPos);
-                RobotMap.getRightWinch().set(ControlMode.MotionMagic, Config.kClimberUpPos);
+                RobotMap.getLeftWinch().set(ControlMode.Position, Config.kClimberUpPos);
+                RobotMap.getRightWinch().set(ControlMode.Position, Config.kClimberUpPos);
             
                 if(RobotMap.getLeftWinch().getSelectedSensorPosition() >= Config.kClimberUpPos - Config.kClimberHysteresis && RobotMap.getRightWinch().getSelectedSensorPosition() >= Config.kClimberUpPos - Config.kClimberHysteresis) {
                     stateFinished = true;
@@ -132,8 +133,13 @@ public class Climber extends Subsystems {
     }
     @Override
     public void initMotorControllers() {
-        // TODO Auto-generated method stub
-        
+
+        RobotMap.getLeftWinch().configFactoryDefault();
+        RobotMap.getRightWinch().configFactoryDefault();
+
+        RobotMap.getLeftWinch().config_kP(0, Constants.kClimberWinchP);
+        RobotMap.getRightWinch().config_kP(0, Constants.kClimberWinchP);
+
     }
     @Override
     public diagnosticState test() {

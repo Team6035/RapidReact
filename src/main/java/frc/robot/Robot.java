@@ -106,7 +106,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    RobotMap.getLeftWinch().set(ControlMode.MotionMagic, 1000000);
 
     Shooter.getInstance().update();
     Pneumatics.getInstance().update();
