@@ -56,21 +56,14 @@ public class TeleopController {
             m_frontIntake.setDesiredState(FrontIntakeStates.STOWED);
         }
 
-        m_driverInterface.consoleOutput(MessageType.CRITICAL, m_climber.getClimberBarCurrentState().toString());
-        if(m_driverInterface.getClimbAdvanceCommand() && m_climber.getClimberBarCurrentState() == ClimberBarStates.LOW && m_climber.getClimberDone()) {
-
-            m_climber.setClimberBarDesiredState(ClimberBarStates.MEDIUM);
-            m_driverInterface.consoleOutput(MessageType.WARNING, "clib");
-
-        } else if(m_driverInterface.getClimbAdvanceCommand()) { //is the climber not on any bar?
-
-            m_climber.setClimberBarDesiredState(ClimberBarStates.LOW);
-        }
+        
 
         if(m_driverInterface.getClimbUpCommand()) {
             m_climber.setClimberDesiredState(ClimberStates.EXTENDED);
         } else if(m_driverInterface.getClimbDownCommand()) {
             m_climber.setClimberDesiredState(ClimberStates.HOOKED);
+        } else if(m_driverInterface.getClimbResetCommand()) {
+            m_climber.setClimberDesiredState(ClimberStates.STOWED);
         }
 
         callDrive();

@@ -173,8 +173,8 @@ public class DriverInterface {
         return joystick1.getRawButton(2);
     }
 
-    public boolean getClimbAdvanceCommand() {
-        return joystick1.getRawButton(11) && joystick1.getRawButton(12);
+    public boolean getClimbResetCommand() {
+        return joystick1.getRawButton(12);
 
     }
 
