@@ -88,7 +88,7 @@ public class DriverInterface {
                 joystickAxisReturn = joystick1.getY();
             break;
             case THROTTLE:
-                joystickAxisReturn = (joystick1.getThrottle() + 1)/2;
+                joystickAxisReturn = ((-joystick1.getThrottle() + 1) / 2);
             break;
             case ROTATION:
                 joystickAxisReturn = joystick1.getTwist();
@@ -158,7 +158,7 @@ public class DriverInterface {
     }
 
     public double getX() {
-        return deadZone(getJoystickAxis(JoystickAxisType.X));
+        return deadZone(getJoystickAxis(JoystickAxisType.X) * .7);
     }
 
     public double getY() {
@@ -172,12 +172,14 @@ public class DriverInterface {
     public boolean getIntakeCommand() {
         return joystick1.getRawButton(2);
     }
-
+    
     public boolean getClimbAdvanceCommand() {
         return joystick1.getRawButton(11) && joystick1.getRawButton(12);
 
     }
-
+    public boolean getVisionCommand(){
+        return joystick1.getRawButton(9);
+    }
     public void update() {
         Shuffleboard.update();
         SmartDashboard.updateValues();

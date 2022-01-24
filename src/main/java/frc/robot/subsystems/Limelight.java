@@ -5,11 +5,9 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Limelight extends Subsystems{
-    NetworkTable table;
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
     public Limelight() {
-       table = NetworkTableInstance.getDefault().getTable("limelight");
-       setPipeline(0);
    }
    public static Limelight mLimelightInstance;
 

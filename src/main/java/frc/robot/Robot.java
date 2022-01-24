@@ -34,6 +34,7 @@ public class Robot extends TimedRobot {
   static FrontIntake m_frontIntake;
   static TeleopController m_teleopController;
   static Climber m_Climber;
+  static VisionTrack vision;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -113,6 +114,7 @@ public class Robot extends TimedRobot {
     TeleopController.getInstance().callTeleopController();
     FrontIntake.getInstance().update();
     Climber.getInstance().update();
+    VisionTrack.getInstance().update();
 
   }
 
