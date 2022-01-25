@@ -8,9 +8,10 @@ import frc.robot.Config;
 import frc.robot.RobotMap;
 
 /** Add your docs here. */
-public class Pnumatics extends Subsystems{
+public class Pneumatics extends Subsystems{
 
     boolean compressor = true;
+    private static Pneumatics m_instance;
 
     @Override
     public void update() {
@@ -55,6 +56,13 @@ public class Pnumatics extends Subsystems{
 
     public void setCompressorStatus(boolean compressorStatus) {
         compressorStatus = compressor;
+    }
+
+    public static Pneumatics getInstance() {
+        if(m_instance == null) {
+            m_instance = new Pneumatics();
+        }
+        return m_instance;
     }
 
 }
