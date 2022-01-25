@@ -40,15 +40,6 @@ public void update(){
   SmartDashboard.putString("state", stateToString());
   switch(desiredState){
       case IDLE:
-      if(m_lime.getAngleToTarget() != 0.0){
-        if(stick.getRawButton(Constants.KVisionCommandID) == true){
-          timesLooped++;
-          if(timesLooped >=30){
-          setDesiredState(VisionState.TURNING);
-          timesLooped = 0;
-          }
-        }
-      }
       if(newState == true &&DriverStation.isTeleop() ){
         RobotMap.getShooterBottom();
         RobotMap.getShooterTop();
@@ -58,6 +49,16 @@ public void update(){
         RobotMap.getIndexerSolenoid().set(false);
         RobotMap.getThroat().set(ControlMode.PercentOutput,0.0);
       }
+      if(stick.getRawButton(Constants.KVisionCommandID) == true){
+        if(m_lime.getAngleToTarget() != 0.0){
+          timesLooped++;
+          if(timesLooped >=30){
+          setDesiredState(VisionState.TURNING);
+          timesLooped = 0;
+          }
+        }
+      }
+
       currentState = desiredState;
       break;
       case TURNING:

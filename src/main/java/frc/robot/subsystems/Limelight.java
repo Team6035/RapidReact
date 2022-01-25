@@ -37,9 +37,6 @@ public class Limelight {
       NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(pipelineId);
     }
 
-    public void blindLuin() {
-      setPipeline(0);
-    }
     /**
      * 
      * @return distance in metres to target
