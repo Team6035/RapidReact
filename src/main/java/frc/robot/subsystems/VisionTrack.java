@@ -4,8 +4,10 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import frc.robot.Constants;
 import frc.robot.DriverInterface;
 import frc.robot.RobotMap;
+import frc.robot.subsystems.Drive.gameMode;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
 public class VisionTrack {
     private static VisionTrack mInstance;
     private static Limelight m_lime;
@@ -19,6 +21,8 @@ public class VisionTrack {
     private double yOffset;
     private boolean newState;
     private double speed;
+    private double tx;
+    private boolean turnStatus;
     public static VisionTrack getInstance() {
         if (mInstance == null) {
           mInstance = new VisionTrack();
@@ -45,14 +49,14 @@ public void update(){
           }
         }
       }
-      if(newState){
-      RobotMap.getShooterBottom();
-      RobotMap.getShooterTop();
-      RobotMap.getShooterBottom().set(ControlMode.PercentOutput,0);
-      RobotMap.getShooterTop().set(ControlMode.PercentOutput, 0);
-      RobotMap.getIndexerMotor().set(ControlMode.PercentOutput, .0);
-      RobotMap.getIndexerSolenoid().set(false);
-      RobotMap.getThroat().set(ControlMode.PercentOutput,0.0);
+      if(newState == true &&DriverStation.isTeleop() ){
+        RobotMap.getShooterBottom();
+        RobotMap.getShooterTop();
+        RobotMap.getShooterBottom().set(ControlMode.PercentOutput,0);
+        RobotMap.getShooterTop().set(ControlMode.PercentOutput, 0);
+        RobotMap.getIndexerMotor().set(ControlMode.PercentOutput, .0);
+        RobotMap.getIndexerSolenoid().set(false);
+        RobotMap.getThroat().set(ControlMode.PercentOutput,0.0);
       }
       currentState = desiredState;
       break;
@@ -68,7 +72,7 @@ public void update(){
         newState = false;
         timesLooped = 0;
       }
-      double tx = m_lime.getAngleToTarget();
+      tx = m_lime.getAngleToTarget();
           // System.out.println("tx: " + tx);
           double visionSteering = (tx * Constants.kVisionTurnKp);
           if(tx <4 && tx >-4){
@@ -146,6 +150,35 @@ public void update(){
       System.out.println(yOffset);
       currentState = desiredState;
       break;
+      case AUTOTURN:
+      if(newState == true){
+        newState = false;
+        turnStatus = false;
+        timesLooped = 0;
+      }
+      tx = m_lime.getAngleToTarget();
+        // System.out.println("tx: " + tx);
+          double AutoVisionSteering = (tx * Constants.kVisionTurnKp);
+          if(tx <4 && tx >-4){
+            double isn = AutoVisionSteering * 2;
+            m_drive.arcadeDrive(0.5, isn, 0.0); 
+          }
+          else{
+            m_drive.arcadeDrive(0.5, AutoVisionSteering, 0.0); 
+          }
+          if(tx <1 && tx >-1){
+            if(timesLooped >= 15){
+            desiredState = VisionState.IDLE;
+            turnStatus = true;
+            }
+            else{
+              timesLooped++;
+            }
+          }
+      currentState = desiredState;
+      break;
+      default:
+      setDesiredState(VisionState.IDLE);
 
     
   }
@@ -163,12 +196,19 @@ public void update(){
       TURNING,
       FINDINGSPEED,
       SHOOTING,
+      AUTOTURN,
   }
 
   public void setDesiredState(VisionState state) {
     newState = true;
     desiredState = state;
 }
+
+  public boolean turnComplete(){
+    return turnStatus;
+  }
+
+
   public VisionState getCurrentState() {
     return currentState;
   }
