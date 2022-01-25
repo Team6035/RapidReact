@@ -92,7 +92,9 @@ public class Config {
     public static final double kClimberHookedPos = 100000; //in encoder units (2048 EPR)
 
     //Climber hysteresis
-    public static final double kClimberHysteresis = 1000; 
+    public static final double kClimberHysteresis = 1000;
+
+    public static final double kLimelightOffsetAmmmount = 50; 
 
 
         

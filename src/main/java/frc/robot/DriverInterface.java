@@ -24,6 +24,9 @@ public class DriverInterface {
         
     }
 
+    private double gameTime = System.currentTimeMillis() / 1000;
+    private double oldTime = 0;
+
     public static DriverInterface getInstance() {
         if(m_instance == null) {
             m_instance = new DriverInterface();
@@ -53,6 +56,33 @@ public class DriverInterface {
         RELEASE,
     }
 
+    public static enum RobotFowardDirection {
+        FRONT,
+        BACK,
+    }
+
+    public static enum RumblePattern {
+        START,
+        STOP,
+        PULSE_SHORT,
+        PULSE_MEDIUM,
+        PULSE_LONG,
+        DOUBLE_PULSE_SHORT,
+        DOUBLE_PULSE_MEDIUM,
+        DOUBLE_PULSE_LONG,
+        PULSE_CONSTANT_START,
+        PUSE_CONSTANT_STOP,
+        NONE,
+    }
+
+    RumblePattern rumblePattern = RumblePattern.NONE;
+    double leftRumbleIntensity = 0;
+    double rightRumbleIntensity = 0;
+    int rumbleStep = 0;
+    long rumbleCycle = 0;
+
+    RobotFowardDirection robotFowardDirection = RobotFowardDirection.FRONT;
+
 
     boolean debugOutput = Config.kDebugOutputDefault;
     boolean verboseOutput = Config.kVerboseOutputDefault;
@@ -60,6 +90,10 @@ public class DriverInterface {
 
     Joystick joystick1 = new Joystick(Config.kJoystick1Port);
     GenericHID xbox1 = new GenericHID(Config.kXbox1Port);
+
+    private double limelightSpeedOffset = 0;
+
+    private boolean climbEnabled = false;
 
     /**
      * Method to set Xbox controller vibrate/rumble
@@ -157,6 +191,21 @@ public class DriverInterface {
         return input;
     }
 
+    public RobotFowardDirection getRobotFowardDirection() {
+        if(joystick1.getRawButton(2)) {
+            if(robotFowardDirection == RobotFowardDirection.FRONT) {
+                if(oldTime + 0.5 <= gameTime) {
+                    robotFowardDirection = RobotFowardDirection.BACK;
+                }
+            } else {
+                if(oldTime + 0.5 <= gameTime) {
+                    robotFowardDirection = RobotFowardDirection.FRONT;
+                }
+            }
+        }
+        return robotFowardDirection;
+    }
+
     public double getX() {
         return deadZone(getJoystickAxis(JoystickAxisType.X));
     }
@@ -169,8 +218,38 @@ public class DriverInterface {
         return joystick1.getTrigger();
     }
 
-    public boolean getIntakeCommand() {
-        return joystick1.getRawButton(2);
+    public boolean getFrontIntakeCommand() {
+
+        if(robotFowardDirection == RobotFowardDirection.FRONT) {
+            if(joystick1.getTrigger()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if(joystick1.getRawButton(4)) {
+                return true;
+            } else {
+                return false;
+            }
+        } 
+    }
+
+    public boolean getBackIntakeCommand() {
+
+        if(robotFowardDirection == RobotFowardDirection.BACK) {
+            if(joystick1.getTrigger()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if(joystick1.getRawButton(4)) {
+                return true;
+            } else {
+                return false;
+            }
+        } 
     }
 
     public boolean getClimbResetCommand() {
@@ -178,7 +257,45 @@ public class DriverInterface {
 
     }
 
+    public boolean getFrontIntakeReverse() {
+        if(getRobotFowardDirection() == RobotFowardDirection.FRONT) {
+            if(joystick1.getRawButton(12)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if(joystick1.getRawButton(11)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public boolean getRearIntakeReverse() {
+        if(getRobotFowardDirection() == RobotFowardDirection.FRONT) {
+            if(joystick1.getRawButton(11)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if(joystick1.getRawButton(12)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public boolean getLimelightCommand() {
+        return joystick1.getRawButton(3);
+    }
+
     public void update() {
+        SmartDashboard.putBoolean("Climb enabled", climbEnabled);
+        gameTime = System.currentTimeMillis()/1000;
         Shuffleboard.update();
         SmartDashboard.updateValues();
 
@@ -201,13 +318,208 @@ public class DriverInterface {
         }
     }
 
+    /**
+     * 
+     * @return true if climb enabled
+     */
+    public boolean updateClimbEnabled() {
+        if(joystick1.getRawButton(7)) {
+            setRumble(1, 1);
+            climbEnabled = true;
+        } else if(joystick1.getRawButton(8)) {
+            climbEnabled = false;
+            setRumble(1, 1);
+        } else {
+            setRumble(0, 0);
+        }
+        return climbEnabled;
+    }
+
     public boolean getClimbUpCommand() {
-        return joystick1.getRawButton(7);
+        return (xbox1.getPOV() == 0 && climbEnabled);
     }
 
     public boolean getClimbDownCommand() {
-        return joystick1.getRawButton(8);
+        return (xbox1.getPOV() == 180 && climbEnabled);
     }
+
+
+    public void setRumblePattern(RumblePattern pattern, double leftIntensity, double rightIntensity) {
+        rumblePattern = pattern;
+        leftRumbleIntensity = leftIntensity;
+        rightRumbleIntensity = rightIntensity;
+    }
+
+    public void updateRumble() {
+        switch(rumblePattern) {
+            default: //catches 'NONE'
+                setRumble(0, 0);
+            break;
+            case START: 
+                setRumble(leftRumbleIntensity, rightRumbleIntensity);
+            break;
+            case STOP: 
+                setRumble(0, 0);
+            break;
+            case PULSE_SHORT:
+                switch(rumbleStep) {
+                    case 0: 
+                        rumbleCycle = 0;
+                        setRumble(leftRumbleIntensity, rightRumbleIntensity);
+                        rumbleStep ++;
+                    break;
+                    case 1:
+                        rumbleCycle ++;
+                        if(rumbleCycle > 15) {
+                            rumbleStep ++;
+                        }
+                    break;
+                    case 2:
+                        setRumble(0, 0);
+                        rumblePattern = RumblePattern.NONE;
+                    break;
+                }
+            break;
+            case PULSE_MEDIUM:
+                switch(rumbleStep) {
+                    case 0: 
+                        rumbleCycle = 0;
+                        setRumble(leftRumbleIntensity, rightRumbleIntensity);
+                        rumbleStep ++;
+                    break;
+                    case 1:
+                        rumbleCycle ++;
+                        if(rumbleCycle > 25) {
+                            rumbleStep ++;
+                        }
+                    break;
+                    case 2:
+                        setRumble(0, 0);
+                        rumblePattern = RumblePattern.NONE;
+                    break;
+                }
+            break;
+            case PULSE_LONG:
+                switch(rumbleStep) {
+                    case 0: 
+                        rumbleCycle = 0;
+                        setRumble(leftRumbleIntensity, rightRumbleIntensity);
+                        rumbleStep ++;
+                    break;
+                    case 1:
+                        rumbleCycle ++;
+                        if(rumbleCycle > 55) {
+                            rumbleStep ++;
+                        }
+                    break;
+                    case 2:
+                        setRumble(0, 0);
+                        rumblePattern = RumblePattern.NONE;
+                    break;
+                }
+            break;
+            case DOUBLE_PULSE_SHORT:
+                switch(rumbleStep) {
+                    case 0: 
+                        rumbleCycle = 0;
+                        setRumble(leftRumbleIntensity, rightRumbleIntensity);
+                        rumbleStep ++;
+                    break;
+                    case 1:
+                        rumbleCycle ++;
+                        if(rumbleCycle > 15) {
+                            rumbleStep ++;
+                        }
+                    break;
+                    case 2:
+                        rumbleCycle ++;
+                        setRumble(0, 0);
+                        if(rumbleCycle > 25) {
+                            rumbleStep ++;
+                        }
+                    break;
+                    case 3:
+                        rumbleCycle ++;
+                        setRumble(leftRumbleIntensity, rightRumbleIntensity);
+                        if(rumbleCycle > 40) {
+                            rumbleStep ++;
+                        }
+                    break;
+                    case 4:
+                        setRumble(0, 0);
+                        rumblePattern = RumblePattern.NONE;
+                }
+            break;
+            case DOUBLE_PULSE_MEDIUM:
+                switch(rumbleStep) {
+                    case 0: 
+                        rumbleCycle = 0;
+                        setRumble(leftRumbleIntensity, rightRumbleIntensity);
+                        rumbleStep ++;
+                    break;
+                    case 1:
+                        rumbleCycle ++;
+                        if(rumbleCycle > 25) {
+                            rumbleStep ++;
+                        }
+                    break;
+                    case 2:
+                        rumbleCycle ++;
+                        setRumble(0, 0);
+                        if(rumbleCycle > 35) {
+                            rumbleStep ++;
+                        }
+                    break;
+                    case 3:
+                        rumbleCycle ++;
+                        setRumble(leftRumbleIntensity, rightRumbleIntensity);
+                        if(rumbleCycle > 60) {
+                            rumbleStep ++;
+                        }
+                    break;
+                    case 4:
+                        setRumble(0, 0);
+                        rumblePattern = RumblePattern.NONE;
+                }
+            break;
+            case DOUBLE_PULSE_LONG:
+                switch(rumbleStep) {
+                    case 0: 
+                        rumbleCycle = 0;
+                        setRumble(leftRumbleIntensity, rightRumbleIntensity);
+                        rumbleStep ++;
+                    break;
+                    case 1:
+                        rumbleCycle ++;
+                        if(rumbleCycle > 60) {
+                            rumbleStep ++;
+                        }
+                    break;
+                    case 2:
+                        rumbleCycle ++;
+                        setRumble(0, 0);
+                        if(rumbleCycle > 80) {
+                            rumbleStep ++;
+                        }
+                    break;
+                    case 3:
+                        rumbleCycle ++;
+                        setRumble(leftRumbleIntensity, rightRumbleIntensity);
+                        if(rumbleCycle > 140) {
+                            rumbleStep ++;
+                        }
+                    break;
+                    case 4:
+                        setRumble(0, 0);
+                        rumblePattern = RumblePattern.NONE;
+                }
+            break;
+        
+        } 
+         
+    }
+
+
 
     //SmartDashboard (shuffleboard) commands
 
@@ -220,6 +532,9 @@ public class DriverInterface {
         verboseOutputChooser.addOption("Verbose + Debug", "ALL");
         SmartDashboard.putData("Verbose Output", verboseOutputChooser);
 
+        SmartDashboard.putBoolean("Climb enabled", climbEnabled);
+        SmartDashboard.putNumber("Shooter Ratio Numerator", 1);
+        SmartDashboard.putNumber("Shooter Ratio Denomonator", 1);
 
     }
 
@@ -229,6 +544,27 @@ public class DriverInterface {
 
     public void outputShooterRPMField(double rpm) {
         SmartDashboard.putNumber("Shooter RPM", rpm);
+    }
+
+    public double getShooterRatioNumeratorField() {
+        return SmartDashboard.getNumber("Shooter Ratio Numerator", 1);
+    }
+
+    public double getShooterRatioDenomonatorField() {
+        return SmartDashboard.getNumber("Shooter Ratio Denomonator", 1);
+    } 
+
+
+    //xbox controlller y
+    //               x   b
+    //                 a
+    public double updateLimelightSpeedOffset() {
+        if(xbox1.getRawButton(1)) {
+            limelightSpeedOffset = limelightSpeedOffset + Config.kLimelightOffsetAmmmount;
+        } else if(xbox1.getRawButton(3)) {
+            limelightSpeedOffset = limelightSpeedOffset - Config.kLimelightOffsetAmmmount;
+        }
+        return limelightSpeedOffset;
     }
 
     
