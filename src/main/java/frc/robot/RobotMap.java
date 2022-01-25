@@ -2,7 +2,9 @@ package frc.robot;
 
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -83,5 +85,16 @@ public class RobotMap {
 	public static TalonFX getRightWinch() {
 		return rightWinch;
 	}
-
+	static WPI_TalonFX indexerMotor = new WPI_TalonFX(26);
+	public static WPI_TalonFX getIndexerMotor(){
+		return indexerMotor;
+	}
+	static Solenoid indexerFlap = new Solenoid(50, PneumaticsModuleType.CTREPCM, 5);
+	public static Solenoid getIndexerSolenoid(){
+		return indexerFlap;
+	}
+	static WPI_VictorSPX throatMotor = new WPI_VictorSPX(29);
+	public static WPI_VictorSPX getThroat(){
+		return throatMotor;
+	}
 }

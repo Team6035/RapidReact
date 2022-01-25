@@ -47,6 +47,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
     Shooter.getInstance().initMotorControllers();
+    VisionTrack.getInstance().setDesiredState(VisionState.IDLE);
   }
 
   /**
@@ -58,6 +59,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    RobotMap.getCompressor().enableDigital();
     if (isEnabled() && !Drive.getInstance().getBrakes()) { // set to brake when enabled if not already set to brake
       Drive.getInstance().setBrakes(true);
     }
@@ -98,7 +100,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-
+    VisionTrack.getInstance().setDesiredState(VisionState.IDLE);
     Climber.getInstance().resetSensors();
 
   }
@@ -107,14 +109,13 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    Shooter.getInstance().update();
+   //Shooter.getInstance().update();
     Pneumatics.getInstance().update();
     if(VisionTrack.getInstance().getCurrentState() == VisionState.IDLE){
     Drive.getInstance().update();
     }
-    //Drive.getInstance().arcadeDrive(1, 1, 0);
     TeleopController.getInstance().callTeleopController();
-    FrontIntake.getInstance().update();
+    //FrontIntake.getInstance().update();
     Climber.getInstance().update();
     VisionTrack.getInstance().update();
 

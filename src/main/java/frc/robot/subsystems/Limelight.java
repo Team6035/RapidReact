@@ -45,8 +45,8 @@ public class Limelight {
      * @return distance in metres to target
      */
     public double getDistanceToTarget() {
-        double ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0.0);
-        return (Constants.kH2 - Constants.kH1) / Math.tan(Constants.kA1 + ty);
-    }
+      setPipeline(0);
+      double ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0.0);
+      return ty;}
 }
 

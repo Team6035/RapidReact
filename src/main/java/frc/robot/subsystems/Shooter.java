@@ -95,7 +95,7 @@ public class Shooter extends Subsystems{
         RobotMap.getShooterTop().config_kI(0, Constants.kShooterI);     
 
         RobotMap.getShooterBottom().setInverted(true);
-        RobotMap.getShooterTop().setInverted(true);
+        RobotMap.getShooterTop().setInverted(false);
 
     }
 
