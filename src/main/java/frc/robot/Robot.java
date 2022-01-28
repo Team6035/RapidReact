@@ -104,6 +104,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
+    DriverInterface.getInstance().displayDiagnosticState();
+
+    DriverInterface.getInstance().updateRumble();
     Shooter.getInstance().update();
     Pneumatics.getInstance().update();
     Drive.getInstance().update();

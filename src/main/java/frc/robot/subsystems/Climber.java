@@ -19,6 +19,7 @@ public class Climber extends Subsystems {
         STOWED,
         EXTENDED,
         HOOKED,
+        MANUAL,
     }
 
     public enum ClimberBarStates {
@@ -38,6 +39,8 @@ public class Climber extends Subsystems {
     private boolean stateFinished = true;
     private byte climberStep = 0;
     private boolean climberDone = false;
+
+    private double climberManualPower = 0;
 
     private static Climber m_instance;
 
@@ -86,6 +89,11 @@ public class Climber extends Subsystems {
                     stateFinished = true;
                     currentClimberState = desiredClimberState;
                 }
+            break;
+            case MANUAL:
+                RobotMap.getLeftWinch().set(ControlMode.PercentOutput, climberManualPower);
+                RobotMap.getRightWinch().set(ControlMode.PercentOutput, climberManualPower);
+
             break;
         } 
 
@@ -214,6 +222,10 @@ public class Climber extends Subsystems {
      */
     public boolean getClimberDone() {
         return climberDone;
+    }
+
+    public void setClimberManualSpeed(double manualSpeed) {
+        climberManualPower = manualSpeed;
     }
 
    

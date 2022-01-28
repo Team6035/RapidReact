@@ -5,10 +5,9 @@
 package frc.robot;
 
 import frc.robot.DriverInterface.JoystickAxisType;
-import frc.robot.DriverInterface.MessageType;
 import frc.robot.DriverInterface.RobotFowardDirection;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.Climber.ClimberBarStates;
+import frc.robot.subsystems.BackIntake.BackIntakeStates;
 import frc.robot.subsystems.Climber.ClimberStates;
 import frc.robot.subsystems.FrontIntake.FrontIntakeStates;
 import frc.robot.subsystems.Shooter.ShooterSpeedSlot;
@@ -19,6 +18,7 @@ public class TeleopController {
 
     private static Drive m_drive;
     private static FrontIntake m_frontIntake;
+    private static BackIntake m_backIntake;
     private static Pneumatics m_pneumatics;
     private static Shooter m_shooter;
     private static DriverInterface m_driverInterface;
@@ -31,6 +31,7 @@ public class TeleopController {
         m_pneumatics = Pneumatics.getInstance();
         m_shooter = Shooter.getInstance();
         m_frontIntake = FrontIntake.getInstance();
+        m_backIntake = BackIntake.getInstance();
         m_climber = Climber.getInstance();
 
     }
@@ -47,7 +48,7 @@ public class TeleopController {
 
         m_shooter.setShooterWheelRatio(m_driverInterface.getShooterRatioNumeratorField(), m_driverInterface.getShooterRatioDenomonatorField());
 
-        if(m_driverInterface.getShootCommand()) {
+        if(m_driverInterface.getManualShootCommand()) {
             m_shooter.setDesiredState(ShooterState.SHOOTING);
         } else {
             m_shooter.setDesiredState(ShooterState.IDLE);
@@ -55,8 +56,18 @@ public class TeleopController {
 
         if(m_driverInterface.getFrontIntakeCommand()) {
             m_frontIntake.setDesiredState(FrontIntakeStates.INTAKING);
+        } else if(m_driverInterface.getFrontIntakeReverse()) {
+            m_frontIntake.setDesiredState(FrontIntakeStates.UNINTAKING);
         } else {
             m_frontIntake.setDesiredState(FrontIntakeStates.STOWED);
+        }
+
+        if(m_driverInterface.getBackIntakeCommand()) {
+            m_backIntake.setDesiredState(BackIntakeStates.INTAKING);
+        } else if(m_driverInterface.getBackIntakeReverse()) {
+            m_backIntake.setDesiredState(BackIntakeStates.UNINTAKING);
+        } else {
+            m_backIntake.setDesiredState(BackIntakeStates.IDLE);
         }
 
         
@@ -70,6 +81,7 @@ public class TeleopController {
         }
 
         callDrive();
+        m_driverInterface.updateLimelightSpeedOffset();
         m_pneumatics.setCompressorStatus(true);
 
         //Update shooter values

@@ -4,13 +4,14 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Subsystems.diagnosticState;
 
 /** Add your docs here. */
 public class DriverInterface {
@@ -81,6 +82,8 @@ public class DriverInterface {
     int rumbleStep = 0;
     long rumbleCycle = 0;
 
+    diagnosticState robotState = diagnosticState.OK;
+
     RobotFowardDirection robotFowardDirection = RobotFowardDirection.FRONT;
 
 
@@ -89,7 +92,7 @@ public class DriverInterface {
 
 
     Joystick joystick1 = new Joystick(Config.kJoystick1Port);
-    GenericHID xbox1 = new GenericHID(Config.kXbox1Port);
+    XboxController xbox1 = new XboxController(Config.kXbox1Port);
 
     private double limelightSpeedOffset = 0;
 
@@ -194,12 +197,14 @@ public class DriverInterface {
     public RobotFowardDirection getRobotFowardDirection() {
         if(joystick1.getRawButton(2)) {
             if(robotFowardDirection == RobotFowardDirection.FRONT) {
-                if(oldTime + 0.5 <= gameTime) {
+                if(oldTime + 0.1 <= gameTime) {
                     robotFowardDirection = RobotFowardDirection.BACK;
+                    oldTime = gameTime;
                 }
             } else {
-                if(oldTime + 0.5 <= gameTime) {
+                if(oldTime + 0.1 <= gameTime) {
                     robotFowardDirection = RobotFowardDirection.FRONT;
+                    oldTime = gameTime;
                 }
             }
         }
@@ -214,8 +219,16 @@ public class DriverInterface {
         return deadZone(getJoystickAxis(JoystickAxisType.Y));
     }
 
-    public boolean getShootCommand() {
+    public boolean getAutoShootCommand() {
         return joystick1.getTrigger();
+    }
+
+    public boolean getManualShootCommand() {
+        return xbox1.getRightTriggerAxis() >= 0.5;
+    }
+
+    public boolean getShooterEjectCommand() {
+        return xbox1.getRightBumper();
     }
 
     public boolean getFrontIntakeCommand() {
@@ -273,7 +286,7 @@ public class DriverInterface {
         }
     }
 
-    public boolean getRearIntakeReverse() {
+    public boolean getBackIntakeReverse() {
         if(getRobotFowardDirection() == RobotFowardDirection.FRONT) {
             if(joystick1.getRawButton(11)) {
                 return true;
@@ -295,6 +308,8 @@ public class DriverInterface {
 
     public void update() {
         SmartDashboard.putBoolean("Climb enabled", climbEnabled);
+        SmartDashboard.putBoolean("Foward direction", getRobotFowardDirection() == RobotFowardDirection.FRONT);
+
         gameTime = System.currentTimeMillis()/1000;
         Shuffleboard.update();
         SmartDashboard.updateValues();
@@ -316,6 +331,7 @@ public class DriverInterface {
                 verboseOutput = true;
                 debugOutput = true;
         }
+        updateClimbEnabled();
     }
 
     /**
@@ -327,8 +343,8 @@ public class DriverInterface {
             setRumble(1, 1);
             climbEnabled = true;
         } else if(joystick1.getRawButton(8)) {
-            climbEnabled = false;
             setRumble(1, 1);
+            climbEnabled = false;
         } else {
             setRumble(0, 0);
         }
@@ -535,6 +551,7 @@ public class DriverInterface {
         SmartDashboard.putBoolean("Climb enabled", climbEnabled);
         SmartDashboard.putNumber("Shooter Ratio Numerator", 1);
         SmartDashboard.putNumber("Shooter Ratio Denomonator", 1);
+        SmartDashboard.putBoolean("Foward direction", getRobotFowardDirection() == RobotFowardDirection.FRONT);
 
     }
 
@@ -565,6 +582,22 @@ public class DriverInterface {
             limelightSpeedOffset = limelightSpeedOffset - Config.kLimelightOffsetAmmmount;
         }
         return limelightSpeedOffset;
+    }
+
+    public diagnosticState getDiagnosticState() {
+        if(RobotMap.getPDH().getTotalCurrent() <= Constants.kIdleCurrent && RobotMap.getPDH().getVoltage() <= Constants.kIdleVoltageCutoff) {
+            return diagnosticState.WARNING;
+        }
+        else {
+            return diagnosticState.OK;
+        }
+    }
+
+    public void displayDiagnosticState() {
+        if(getDiagnosticState() == diagnosticState.WARNING) {
+            consoleOutput(MessageType.WARNING, "CHANGE BATTERY NOW!!!!!");
+            robotState = diagnosticState.WARNING;
+        }
     }
 
     

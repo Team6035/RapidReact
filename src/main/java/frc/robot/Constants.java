@@ -18,7 +18,8 @@ public class Constants {
 	public static final int kRightWinchCanID = 14;
 
 
-	public static int kPCMCanID = 50;
+	public static final int kPCMCanID = 50;
+	public static final int kPDHCanID = 51;
 
 	public static int kFrontIntakeEscCanID = 11;
 
@@ -28,6 +29,7 @@ public class Constants {
 	public static double kDriveMaxAccel = 4.0;
 	public static double kDriveMaxTurnSpeed = 12.12;
 	public static double kDriveMaxTurnAccel = 24.24;
+	public static final int kBackIntakeEscCanID = 12;
     
 	public static final double kVisionTurnKp = 0.029;//was 0.024; // 0.012 for 2 centre nitrile
 	public static final double kDriveTurnStictionConstant = 0.0; // FIXME
@@ -40,5 +42,8 @@ public class Constants {
 	public static final double kShooterI = 0.00014;
 
 	public static final double kClimberWinchP = 0.0623;
+
+	public static final double kIdleCurrent = 1; //Ampres
+	public static final double kIdleVoltageCutoff = 12.2; //volts
 
 }
