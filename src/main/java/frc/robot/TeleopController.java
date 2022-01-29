@@ -4,11 +4,15 @@
 
 package frc.robot;
 
+import java.net.http.HttpClient.Version;
+
 import frc.robot.DriverInterface.JoystickAxisType;
 import frc.robot.DriverInterface.RobotFowardDirection;
+import frc.robot.DriverInterface.VersionType;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.Intake.IntakeStates;
+import frc.robot.subsystems.BackIntake.BackIntakeStates;
 import frc.robot.subsystems.Climber.ClimberStates;
+import frc.robot.subsystems.FrontIntake.FrontIntakeStates;
 import frc.robot.subsystems.Shooter.ShooterSpeedSlot;
 import frc.robot.subsystems.Shooter.ShooterState;
 
@@ -16,7 +20,8 @@ import frc.robot.subsystems.Shooter.ShooterState;
 public class TeleopController {
 
     private static Drive m_drive;
-    private static Intake m_intake;
+    private static FrontIntake m_frontIntake;
+    private static BackIntake m_backIntake;
     private static Pneumatics m_pneumatics;
     private static Shooter m_shooter;
     private static DriverInterface m_driverInterface;
@@ -28,7 +33,8 @@ public class TeleopController {
         m_drive = Drive.getInstance();
         m_pneumatics = Pneumatics.getInstance();
         m_shooter = Shooter.getInstance();
-        m_intake = Intake.getInstance();
+        m_frontIntake = FrontIntake.getInstance();
+        m_backIntake = BackIntake.getInstance();
         m_climber = Climber.getInstance();
 
     }
@@ -52,11 +58,19 @@ public class TeleopController {
         }
 
         if(m_driverInterface.getFrontIntakeCommand()) {
-            m_intake.setDesiredState(IntakeStates.INTAKING);
+            m_frontIntake.setDesiredState(FrontIntakeStates.INTAKING);
         } else if(m_driverInterface.getFrontIntakeReverse()) {
-            m_intake.setDesiredState(IntakeStates.UNINTAKING);
+            m_frontIntake.setDesiredState(FrontIntakeStates.UNINTAKING);
         } else {
-            m_intake.setDesiredState(IntakeStates.IDLE);
+            m_frontIntake.setDesiredState(FrontIntakeStates.STOWED);
+        }
+
+        if(m_driverInterface.getBackIntakeCommand()) {
+            m_backIntake.setDesiredState(BackIntakeStates.INTAKING);
+        } else if(m_driverInterface.getBackIntakeReverse()) {
+            m_backIntake.setDesiredState(BackIntakeStates.UNINTAKING);
+        } else {
+            m_backIntake.setDesiredState(BackIntakeStates.IDLE);
         }
 
         

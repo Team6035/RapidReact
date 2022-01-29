@@ -10,26 +10,26 @@ import frc.robot.Config;
 import frc.robot.RobotMap;
 
 /** Add your docs here. */
-public class Intake extends Subsystems{
+public class BackIntake extends Subsystems{
 
-    public static enum IntakeStates {
+    public static enum BackIntakeStates {
         IDLE,
         INTAKING,
         UNINTAKING,
     }
 
-    private IntakeStates currentState = IntakeStates.IDLE;
-    private IntakeStates desiredState = IntakeStates.IDLE;
+    private BackIntakeStates currentState = BackIntakeStates.IDLE;
+    private BackIntakeStates desiredState = BackIntakeStates.IDLE;
     
-    public Intake() {
+    public BackIntake() {
 
     }
 
-    private static Intake m_instance;
+    private static BackIntake m_instance;
 
-    public static Intake getInstance() {
+    public static BackIntake getInstance() {
         if(m_instance == null) {
-            m_instance = new Intake();
+            m_instance = new BackIntake();
         }
 
         return m_instance;
@@ -41,19 +41,19 @@ public class Intake extends Subsystems{
         switch(currentState) {
             default:
 
-                RobotMap.getIntakeESC().set(ControlMode.PercentOutput, 0);
+                RobotMap.getBackIntakeESC().set(ControlMode.PercentOutput, 0);
                 currentState = desiredState;
 
             break;
             case INTAKING: 
 
-                RobotMap.getIntakeESC().set(ControlMode.PercentOutput, Config.kIntakeSpeed);
+                RobotMap.getBackIntakeESC().set(ControlMode.PercentOutput, Config.kIntakeSpeed);
                 currentState = desiredState;
 
             break;
             case UNINTAKING: 
 
-                RobotMap.getIntakeESC().set(ControlMode.PercentOutput, Config.kIntakeSpeed * -1);
+                RobotMap.getFrontIntakeESC().set(ControlMode.PercentOutput, Config.kIntakeSpeed * -1);
                 currentState = desiredState;
 
             break;
@@ -94,14 +94,14 @@ public class Intake extends Subsystems{
     /**
      * @return The current state of the intakes
      */
-    public IntakeStates getCurrentState() {
+    public BackIntakeStates getCurrentState() {
         return currentState;
     }
 
     /**
      * @param State to become the intake desired state.
      */
-    public void setDesiredState(IntakeStates state) {
+    public void setDesiredState(BackIntakeStates state) {
         desiredState = state;
     }
 

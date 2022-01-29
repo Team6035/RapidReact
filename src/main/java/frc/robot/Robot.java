@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
   static Pneumatics m_pneumatics;
   static Shooter m_shooter;
   static Drive m_drive;
-  static Intake m_frontIntake;
+  static FrontIntake m_frontIntake;
   static TeleopController m_teleopController;
   static Climber m_Climber;
 
@@ -112,7 +112,7 @@ public class Robot extends TimedRobot {
     Pneumatics.getInstance().update();
     Drive.getInstance().update();
     TeleopController.getInstance().callTeleopController();
-    Intake.getInstance().update();
+    FrontIntake.getInstance().update();
     Climber.getInstance().update();
 
   }
