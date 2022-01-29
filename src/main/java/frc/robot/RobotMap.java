@@ -5,7 +5,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
 
 public class RobotMap {
 
@@ -61,26 +60,18 @@ public class RobotMap {
 		return compressor;
 	}
 
-	static TalonFX frontIntakeMotor = new TalonFX(Constants.kFrontIntakeEscCanID);
-	static Solenoid frontIntakeSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.kFrontIntakeSolenoidChannel);
+	static TalonFX frontIntakeMotor = new TalonFX(Constants.kIntakeEscCanID);
 	
-	public static TalonFX getFrontIntakeESC() {
+	public static TalonFX getIntakeESC() {
 		return frontIntakeMotor;
 	}
 
-	public static Solenoid getFrontIntakeSolenoid() {
-		return frontIntakeSolenoid;
+
+	static TalonFX winch = new TalonFX(Constants.kWinchCanID);
+
+	public static TalonFX getWinch() {
+		return winch;
 	}
 
-	static TalonFX leftWinch = new TalonFX(Constants.kLeftWinchCanID);
-	static TalonFX rightWinch = new TalonFX(Constants.kRightWinchCanID);
-
-	public static TalonFX getLeftWinch() {
-		return leftWinch;
-	}
-
-	public static TalonFX getRightWinch() {
-		return rightWinch;
-	}
 
 }

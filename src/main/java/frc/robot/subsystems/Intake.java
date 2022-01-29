@@ -10,26 +10,26 @@ import frc.robot.Config;
 import frc.robot.RobotMap;
 
 /** Add your docs here. */
-public class FrontIntake extends Subsystems{
+public class Intake extends Subsystems{
 
-    public static enum FrontIntakeStates {
-        STOWED,
+    public static enum IntakeStates {
+        IDLE,
         INTAKING,
         UNINTAKING,
     }
 
-    private FrontIntakeStates currentState = FrontIntakeStates.STOWED;
-    private FrontIntakeStates desiredState = FrontIntakeStates.STOWED;
+    private IntakeStates currentState = IntakeStates.IDLE;
+    private IntakeStates desiredState = IntakeStates.IDLE;
     
-    public FrontIntake() {
+    public Intake() {
 
     }
 
-    private static FrontIntake m_instance;
+    private static Intake m_instance;
 
-    public static FrontIntake getInstance() {
+    public static Intake getInstance() {
         if(m_instance == null) {
-            m_instance = new FrontIntake();
+            m_instance = new Intake();
         }
 
         return m_instance;
@@ -41,22 +41,19 @@ public class FrontIntake extends Subsystems{
         switch(currentState) {
             default:
 
-                RobotMap.getFrontIntakeESC().set(ControlMode.PercentOutput, 0);
-                RobotMap.getFrontIntakeSolenoid().set(false);
+                RobotMap.getIntakeESC().set(ControlMode.PercentOutput, 0);
                 currentState = desiredState;
 
             break;
             case INTAKING: 
 
-                RobotMap.getFrontIntakeESC().set(ControlMode.PercentOutput, Config.kIntakeSpeed);
-                RobotMap.getFrontIntakeSolenoid().set(true);
+                RobotMap.getIntakeESC().set(ControlMode.PercentOutput, Config.kIntakeSpeed);
                 currentState = desiredState;
 
             break;
             case UNINTAKING: 
 
-                RobotMap.getFrontIntakeESC().set(ControlMode.PercentOutput, Config.kIntakeSpeed * -1);
-                RobotMap.getFrontIntakeSolenoid().set(true);
+                RobotMap.getIntakeESC().set(ControlMode.PercentOutput, Config.kIntakeSpeed * -1);
                 currentState = desiredState;
 
             break;
@@ -97,14 +94,14 @@ public class FrontIntake extends Subsystems{
     /**
      * @return The current state of the intakes
      */
-    public FrontIntakeStates getCurrentState() {
+    public IntakeStates getCurrentState() {
         return currentState;
     }
 
     /**
      * @param State to become the intake desired state.
      */
-    public void setDesiredState(FrontIntakeStates state) {
+    public void setDesiredState(IntakeStates state) {
         desiredState = state;
     }
 

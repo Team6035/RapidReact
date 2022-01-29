@@ -5,11 +5,9 @@
 package frc.robot;
 
 import frc.robot.DriverInterface.JoystickAxisType;
-import frc.robot.DriverInterface.MessageType;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.Climber.ClimberBarStates;
 import frc.robot.subsystems.Climber.ClimberStates;
-import frc.robot.subsystems.FrontIntake.FrontIntakeStates;
+import frc.robot.subsystems.Intake.IntakeStates;
 import frc.robot.subsystems.Shooter.ShooterSpeedSlot;
 import frc.robot.subsystems.Shooter.ShooterState;
 
@@ -17,7 +15,7 @@ import frc.robot.subsystems.Shooter.ShooterState;
 public class TeleopController {
 
     private static Drive m_drive;
-    private static FrontIntake m_frontIntake;
+    private static Intake m_intake;
     private static Pneumatics m_pneumatics;
     private static Shooter m_shooter;
     private static DriverInterface m_driverInterface;
@@ -29,7 +27,7 @@ public class TeleopController {
         m_drive = Drive.getInstance();
         m_pneumatics = Pneumatics.getInstance();
         m_shooter = Shooter.getInstance();
-        m_frontIntake = FrontIntake.getInstance();
+        m_intake = Intake.getInstance();
         m_climber = Climber.getInstance();
 
     }
@@ -51,9 +49,9 @@ public class TeleopController {
         }
 
         if(m_driverInterface.getIntakeCommand()) {
-            m_frontIntake.setDesiredState(FrontIntakeStates.INTAKING);
+            m_intake.setDesiredState(IntakeStates.INTAKING);
         } else {
-            m_frontIntake.setDesiredState(FrontIntakeStates.STOWED);
+            m_intake.setDesiredState(IntakeStates.IDLE);
         }
 
         

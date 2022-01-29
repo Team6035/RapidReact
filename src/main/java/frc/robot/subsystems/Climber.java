@@ -31,13 +31,6 @@ public class Climber extends Subsystems {
 
     private ClimberStates currentClimberState = ClimberStates.STOWED;
     private ClimberStates desiredClimberState = ClimberStates.STOWED;
-    
-    private ClimberBarStates currentBarState = ClimberBarStates.STOWED;
-    private ClimberBarStates desiredBarState = ClimberBarStates.STOWED;
-
-    private boolean stateFinished = true;
-    private byte climberStep = 0;
-    private boolean climberDone = false;
 
     private static Climber m_instance;
 
@@ -58,94 +51,34 @@ public class Climber extends Subsystems {
 
         switch(currentClimberState) {
             default: //stowed
-                stateFinished = false;
-                RobotMap.getLeftWinch().set(ControlMode.Position, Config.kClimberStowedPos);
-                RobotMap.getRightWinch().set(ControlMode.Position, Config.kClimberStowedPos);
+                RobotMap.getWinch().set(ControlMode.Position, Config.kClimberStowedPos);
             
-                if(RobotMap.getLeftWinch().getSelectedSensorPosition() <= Config.kClimberStowedPos + Config.kClimberHysteresis && RobotMap.getRightWinch().getSelectedSensorPosition() <= Config.kClimberStowedPos + Config.kClimberHysteresis) {
-                    stateFinished = true;
+                if(RobotMap.getWinch().getSelectedSensorPosition() <= Config.kClimberStowedPos + Config.kClimberHysteresis) {
                     currentClimberState = desiredClimberState;
                 }
             break;
             case EXTENDED:
-                stateFinished = false;
-                RobotMap.getLeftWinch().set(ControlMode.Position, Config.kClimberUpPos);
-                RobotMap.getRightWinch().set(ControlMode.Position, Config.kClimberUpPos);
+                RobotMap.getWinch().set(ControlMode.Position, Config.kClimberUpPos);
             
-                if(RobotMap.getLeftWinch().getSelectedSensorPosition() >= Config.kClimberUpPos - Config.kClimberHysteresis && RobotMap.getRightWinch().getSelectedSensorPosition() >= Config.kClimberUpPos - Config.kClimberHysteresis) {
-                    stateFinished = true;
+                if(RobotMap.getWinch().getSelectedSensorPosition() >= Config.kClimberUpPos - Config.kClimberHysteresis) {
                     currentClimberState = desiredClimberState;
                 }
             break;
             case HOOKED:
-                stateFinished = false;
-                RobotMap.getLeftWinch().set(ControlMode.Position, Config.kClimberHookedPos);
-                RobotMap.getRightWinch().set(ControlMode.Position, Config.kClimberHookedPos);
+                RobotMap.getWinch().set(ControlMode.Position, Config.kClimberHookedPos);
             
-                if(RobotMap.getLeftWinch().getSelectedSensorPosition() <= Config.kClimberHookedPos + Config.kClimberHysteresis && RobotMap.getRightWinch().getSelectedSensorPosition() <= Config.kClimberHookedPos + Config.kClimberHysteresis) {
-                    stateFinished = true;
+                if(RobotMap.getWinch().getSelectedSensorPosition() <= Config.kClimberHookedPos + Config.kClimberHysteresis) {
                     currentClimberState = desiredClimberState;
                 }
             break;
         } 
-
-        switch(currentBarState) {
-            default: //stowed
-                currentBarState = desiredBarState;
-            break;
-            case LOW: 
-                climberDone = false;
-                switch(climberStep) {
-                    case 0:
-                        setClimberDesiredState(ClimberStates.EXTENDED);
-                        if(stateFinished) {
-                            climberStep ++;
-                        }
-                    break;
-                    case 1:
-                        setClimberDesiredState(ClimberStates.HOOKED);
-                        if(stateFinished) {
-                            climberStep ++;
-                        }
-                    break;
-                    case 2:
-                        climberDone = true;
-                        currentBarState = desiredBarState;
-                    break;
-                }
-            break;
-            case MEDIUM:
-                climberDone = false;
-                switch(climberStep) {
-                    case 0:
-                        setClimberDesiredState(ClimberStates.EXTENDED);
-                        if(stateFinished) {
-                            climberStep ++;
-                        }
-                    break;
-                    case 1:
-                        setClimberDesiredState(ClimberStates.HOOKED);
-                        if(stateFinished) {
-                            climberStep ++;
-                        }
-                    break;
-                    case 2:
-                        climberDone = true;
-                        currentBarState = desiredBarState;
-                    break;
-                }
-            break;
-        }
-        
     
 
     }
     @Override
     public void resetSensors() {
-        climberStep = 0;
 
-        RobotMap.getLeftWinch().setSelectedSensorPosition(0);
-        RobotMap.getRightWinch().setSelectedSensorPosition(0);
+        RobotMap.getWinch().setSelectedSensorPosition(0);
 
     }
     @Override
@@ -161,14 +94,11 @@ public class Climber extends Subsystems {
     @Override
     public void initMotorControllers() {
         
-        RobotMap.getRightWinch().configFactoryDefault();
-        RobotMap.getRightWinch().configFactoryDefault();
+        RobotMap.getWinch().configFactoryDefault();
 
-        RobotMap.getLeftWinch().config_kP(0, Constants.kClimberWinchP);
-        RobotMap.getRightWinch().config_kP(0, Constants.kClimberWinchP);
+        RobotMap.getWinch().config_kP(0, Constants.kClimberWinchP);
 
-        RobotMap.getLeftWinch().setNeutralMode(NeutralMode.Brake);
-        RobotMap.getRightWinch().setNeutralMode(NeutralMode.Brake);
+        RobotMap.getWinch().setNeutralMode(NeutralMode.Brake);
 
 
 
@@ -193,31 +123,6 @@ public class Climber extends Subsystems {
     public void  setClimberDesiredState(ClimberStates desiredState) {
         desiredClimberState = desiredState;
     }
-
-    /**
-     * @return the current state of the climber
-     */
-    public ClimberBarStates getClimberBarCurrentState() {
-        return currentBarState;
-    }
-
-    /**
-     * 
-     * @param desiredState the desired positon of the climber
-     */
-    public void  setClimberBarDesiredState(ClimberBarStates desiredState) {
-        desiredBarState = desiredState;
-    }
-
-    /**
-     * @return if climber is done
-     */
-    public boolean getClimberDone() {
-        return climberDone;
-    }
-
-   
-
     
 
 }
