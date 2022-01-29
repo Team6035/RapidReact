@@ -96,7 +96,7 @@ public class DriverInterface {
 
     private double limelightSpeedOffset = 0;
 
-    private boolean climbEnabled = false;
+    boolean climbEnabled = false;
 
     /**
      * Method to set Xbox controller vibrate/rumble
@@ -332,13 +332,15 @@ public class DriverInterface {
                 debugOutput = true;
         }
         updateClimbEnabled();
+
+        updateRumble();
     }
 
     /**
      * 
      * @return true if climb enabled
      */
-    public boolean updateClimbEnabled() {
+    public void updateClimbEnabled() {
         if(joystick1.getRawButton(7)) {
             setRumble(1, 1);
             climbEnabled = true;
@@ -348,15 +350,15 @@ public class DriverInterface {
         } else {
             setRumble(0, 0);
         }
-        return climbEnabled;
     }
 
     public boolean getClimbUpCommand() {
-        return (xbox1.getPOV() == 0 && climbEnabled);
+        System.out.println(xbox1.getPOV());
+        return (xbox1.getPOV() == 0 && SmartDashboard.getBoolean("Climb enabled", true));
     }
 
     public boolean getClimbDownCommand() {
-        return (xbox1.getPOV() == 180 && climbEnabled);
+        return (xbox1.getPOV() == 180 && SmartDashboard.getBoolean("Climb enabled", true));
     }
 
 

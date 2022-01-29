@@ -95,6 +95,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
 
+    Climber.getInstance().initMotorControllers();
     Climber.getInstance().resetSensors();
     DriverInterface.getInstance().printVersionNumber(Config.versionType, Config.version);
 
@@ -106,7 +107,7 @@ public class Robot extends TimedRobot {
 
     DriverInterface.getInstance().displayDiagnosticState();
 
-    DriverInterface.getInstance().updateRumble();
+    DriverInterface.getInstance().update();
     Shooter.getInstance().update();
     Pneumatics.getInstance().update();
     Drive.getInstance().update();
