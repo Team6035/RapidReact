@@ -9,7 +9,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import frc.robot.Config;
 import frc.robot.Constants;
-
 import frc.robot.RobotMap;
 
 /** Add your docs here. */
@@ -226,6 +225,13 @@ public class Climber extends Subsystems {
 
     public void setClimberManualSpeed(double manualSpeed) {
         climberManualPower = manualSpeed;
+    }
+
+    @Override
+    public void clearFaults() {
+        RobotMap.getLeftWinch().clearStickyFaults();  
+        RobotMap.getLeftWinch().clearStickyFaults();        
+      
     }
 
    

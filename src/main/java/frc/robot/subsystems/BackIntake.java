@@ -105,4 +105,9 @@ public class BackIntake extends Subsystems{
         desiredState = state;
     }
 
+    @Override
+    public void clearFaults() {
+        RobotMap.getBackIntakeESC().clearStickyFaults();        
+    }
+
 }

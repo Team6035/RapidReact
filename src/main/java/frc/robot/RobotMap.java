@@ -2,6 +2,7 @@ package frc.robot;
 
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -95,5 +96,24 @@ public class RobotMap {
 	public static PowerDistribution getPDH() {
 		return pdh;
 	}
+
+	static TalonSRX feedA = new TalonSRX(Constants.kFeedACanID);
+	static TalonSRX feedB = new TalonSRX(Constants.kFeedBCanID);
+	static TalonSRX indexerA = new TalonSRX(Constants.kIndexerACanID);
+	static TalonSRX indexerB = new TalonSRX(Constants.kIndexerBCanID);
+
+	public static TalonSRX getFeedA() {
+		return feedA;
+	}
+	public static TalonSRX getFeedB() {
+		return feedB;
+	}
+	public static TalonSRX getIndexerA() {
+		return indexerA;
+	}
+	public static TalonSRX getIndexerB() {
+		return indexerB;
+	}
+
 
 }

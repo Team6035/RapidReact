@@ -49,14 +49,17 @@ public class Shooter extends Subsystems{
         switch(currentState) {
             default: //catches 'IDLE'
                 stopShoter();
+                setIndexer(0);
                 currentState = desiredState;
             break;
             case SHOOTING:
+                setIndexer(1);
                 setShooterSpeedSlot(ShooterSpeedSlot.SHOOTING);
                 shooterPID();
                 currentState = desiredState;
             break;
             case EJECT:
+                setIndexer(1);
                 setShooterSpeedSlot(ShooterSpeedSlot.EJECT);
                 shooterPID();
                 currentState = desiredState;
@@ -88,6 +91,16 @@ public class Shooter extends Subsystems{
         RobotMap.getShooterBottom().configFactoryDefault();
         RobotMap.getShooterTop ().configFactoryDefault();
 
+        RobotMap.getIndexerA().configFactoryDefault();
+        RobotMap.getIndexerB().configFactoryDefault();
+        RobotMap.getFeedA().configFactoryDefault();
+        RobotMap.getFeedB().configFactoryDefault();
+
+        RobotMap.getIndexerA().setInverted(true);;
+        RobotMap.getIndexerB().setInverted(true);
+        RobotMap.getFeedA().setInverted(true);
+        RobotMap.getFeedB().setInverted(true);
+
         RobotMap.getShooterBottom().config_kP(0, Constants.kShooterP);       
         RobotMap.getShooterTop().config_kP(0, Constants.kShooterP);       
 
@@ -96,6 +109,8 @@ public class Shooter extends Subsystems{
 
         RobotMap.getShooterBottom().setInverted(false);
         RobotMap.getShooterTop().setInverted(true);
+
+
 
     }
 
@@ -207,6 +222,26 @@ public class Shooter extends Subsystems{
     public void stopShoter() {
         RobotMap.getShooterBottom().set(ControlMode.PercentOutput, 0);
         RobotMap.getShooterTop().set(ControlMode.PercentOutput, 0);
+
+    }
+
+    public void setIndexer(double speed) {
+        RobotMap.getIndexerA().set(ControlMode.PercentOutput, speed);
+        RobotMap.getIndexerB().set(ControlMode.PercentOutput, speed);
+        RobotMap.getFeedA().set(ControlMode.PercentOutput, speed);
+        RobotMap.getFeedB().set(ControlMode.PercentOutput, speed);
+
+    }
+
+    @Override
+    public void clearFaults() {
+        RobotMap.getShooterBottom().clearStickyFaults();
+        RobotMap.getShooterTop().clearStickyFaults();
+
+        RobotMap.getFeedA().clearStickyFaults();
+        RobotMap.getFeedB().clearStickyFaults();
+        RobotMap.getIndexerA().clearStickyFaults();
+        RobotMap.getIndexerB().clearStickyFaults();
 
     }
      

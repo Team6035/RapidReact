@@ -108,4 +108,9 @@ public class FrontIntake extends Subsystems{
         desiredState = state;
     }
 
+    @Override
+    public void clearFaults() {
+        RobotMap.getFrontIntakeESC().clearStickyFaults();
+    }
+
 }

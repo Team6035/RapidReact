@@ -127,7 +127,17 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when test mode is enabled. */
   @Override
-  public void testInit() {}
+  public void testInit() {
+    BackIntake.getInstance().clearFaults();
+    FrontIntake.getInstance().clearFaults();
+    Climber.getInstance().clearFaults();
+    Drive.getInstance().clearFaults();
+    Pneumatics.getInstance().clearFaults();
+    Shooter.getInstance().clearFaults();
+    DriverInterface.getInstance().clearPDHFaults();
+
+  }
+
 
   /** This function is called periodically during test mode. */
   @Override

@@ -320,4 +320,14 @@ public class Drive extends Subsystems {
         
         return null;
     }
+    @Override
+    public void clearFaults() {
+        RobotMap.getLeftDriveA().clearStickyFaults();  
+        RobotMap.getLeftDriveB().clearStickyFaults();        
+        RobotMap.getLeftDriveC().clearStickyFaults();        
+      
+        RobotMap.getRightDriveA().clearStickyFaults();  
+        RobotMap.getRightDriveB().clearStickyFaults();        
+        RobotMap.getRightDriveC().clearStickyFaults();
+    }
 }

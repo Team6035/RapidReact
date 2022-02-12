@@ -602,6 +602,10 @@ public class DriverInterface {
         }
     }
 
+    public void clearPDHFaults() {
+        RobotMap.getPDH().clearStickyFaults();
+    }
+
     
 
 
