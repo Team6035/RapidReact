@@ -65,11 +65,11 @@ public class RobotMap {
 	}
 
 	static TalonFX frontIntakeMotor = new TalonFX(Constants.kFrontIntakeEscCanID);
-	static Solenoid frontIntakeSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.kFrontIntakeSolenoidChannel);
+	static Solenoid frontIntakeSolenoid = new Solenoid(Constants.kPCMCanID, PneumaticsModuleType.REVPH, Constants.kFrontIntakeSolenoidChannel);
 
 	static TalonFX backIntakeMotor = new TalonFX(Constants.kBackIntakeEscCanID);
 	public static TalonFX getBackIntakeESC() {
-		return frontIntakeMotor;
+		return backIntakeMotor;
 	}
 	
 	public static TalonFX getFrontIntakeESC() {
@@ -91,7 +91,7 @@ public class RobotMap {
 		return rightWinch;
 	}
 
-	static PowerDistribution pdh = new PowerDistribution(Constants.kPDHCanID, ModuleType.kCTRE);
+	static PowerDistribution pdh = new PowerDistribution(Constants.kPDHCanID, ModuleType.kRev);
 
 	public static PowerDistribution getPDH() {
 		return pdh;

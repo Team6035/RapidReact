@@ -14,13 +14,13 @@ public class Constants {
 	public static int kShooterBottomCanID = 9;
 	public static int kShooterTopCanID = 10;
 
-	public static final int kIndexerACanID = 11;
-	public static final int kIndexerBCanID = 12;
-	public static final int kFeedACanID = 13;
-	public static final int kFeedBCanID = 14;
+	public static final int kIndexerACanID = 13;
+	public static final int kIndexerBCanID = 14;
+	public static final int kFeedACanID = 15;
+	public static final int kFeedBCanID = 16;
 
-	public static final int kLeftWinchCanID = 17;
-	public static final int kRightWinchCanID = 18;
+	public static final int kLeftWinchCanID = 19;
+	public static final int kRightWinchCanID = 20;
 
 
 	public static final int kPCMCanID = 50;

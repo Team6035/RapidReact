@@ -37,6 +37,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    Drive.getInstance().setBrakes(false);
+
     DriverInterface.getInstance().initSmartDashboard();
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
@@ -72,6 +74,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    Drive.getInstance().setBrakes(true);
+
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
@@ -98,6 +102,7 @@ public class Robot extends TimedRobot {
     Climber.getInstance().initMotorControllers();
     Climber.getInstance().resetSensors();
     DriverInterface.getInstance().printVersionNumber(Config.versionType, Config.version);
+    Drive.getInstance().setBrakes(true);
 
   }
 
@@ -113,13 +118,17 @@ public class Robot extends TimedRobot {
     Drive.getInstance().update();
     TeleopController.getInstance().callTeleopController();
     FrontIntake.getInstance().update();
+    BackIntake.getInstance().update();
     Climber.getInstance().update();
 
   }
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    Drive.getInstance().setBrakes(true);
+
+  }
 
   /** This function is called periodically when disabled. */
   @Override
@@ -128,6 +137,8 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
+    Drive.getInstance().setBrakes(true);
+
     BackIntake.getInstance().clearFaults();
     FrontIntake.getInstance().clearFaults();
     Climber.getInstance().clearFaults();

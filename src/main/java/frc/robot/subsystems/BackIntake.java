@@ -37,23 +37,23 @@ public class BackIntake extends Subsystems{
 
     @Override
     public void update() {
-
         switch(currentState) {
             default:
-
                 RobotMap.getBackIntakeESC().set(ControlMode.PercentOutput, 0);
-                currentState = desiredState;
 
+
+                currentState = desiredState;
             break;
             case INTAKING: 
-
                 RobotMap.getBackIntakeESC().set(ControlMode.PercentOutput, Config.kIntakeSpeed);
+
+
                 currentState = desiredState;
 
             break;
             case UNINTAKING: 
 
-                RobotMap.getFrontIntakeESC().set(ControlMode.PercentOutput, Config.kIntakeSpeed * -1);
+                RobotMap.getBackIntakeESC().set(ControlMode.PercentOutput, Config.kIntakeSpeed * -1);
                 currentState = desiredState;
 
             break;

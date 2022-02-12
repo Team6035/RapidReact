@@ -49,17 +49,14 @@ public class Shooter extends Subsystems{
         switch(currentState) {
             default: //catches 'IDLE'
                 stopShoter();
-                setIndexer(0);
                 currentState = desiredState;
             break;
             case SHOOTING:
-                setIndexer(1);
                 setShooterSpeedSlot(ShooterSpeedSlot.SHOOTING);
                 shooterPID();
                 currentState = desiredState;
             break;
             case EJECT:
-                setIndexer(1);
                 setShooterSpeedSlot(ShooterSpeedSlot.EJECT);
                 shooterPID();
                 currentState = desiredState;
@@ -98,8 +95,8 @@ public class Shooter extends Subsystems{
 
         RobotMap.getIndexerA().setInverted(true);;
         RobotMap.getIndexerB().setInverted(true);
-        RobotMap.getFeedA().setInverted(true);
-        RobotMap.getFeedB().setInverted(true);
+        RobotMap.getFeedA().setInverted(false);
+        RobotMap.getFeedB().setInverted(false);
 
         RobotMap.getShooterBottom().config_kP(0, Constants.kShooterP);       
         RobotMap.getShooterTop().config_kP(0, Constants.kShooterP);       
@@ -107,7 +104,7 @@ public class Shooter extends Subsystems{
         RobotMap.getShooterBottom().config_kI(0, Constants.kShooterI);       
         RobotMap.getShooterTop().config_kI(0, Constants.kShooterI);     
 
-        RobotMap.getShooterBottom().setInverted(false);
+        RobotMap.getShooterBottom().setInverted(true);
         RobotMap.getShooterTop().setInverted(true);
 
 
@@ -228,6 +225,10 @@ public class Shooter extends Subsystems{
     public void setIndexer(double speed) {
         RobotMap.getIndexerA().set(ControlMode.PercentOutput, speed);
         RobotMap.getIndexerB().set(ControlMode.PercentOutput, speed);
+        
+    }
+
+    public void setFeed(double speed) {
         RobotMap.getFeedA().set(ControlMode.PercentOutput, speed);
         RobotMap.getFeedB().set(ControlMode.PercentOutput, speed);
 
@@ -243,6 +244,15 @@ public class Shooter extends Subsystems{
         RobotMap.getIndexerA().clearStickyFaults();
         RobotMap.getIndexerB().clearStickyFaults();
 
+    }
+
+    public boolean getShooterAtSpeed() {
+        System.out.println(RobotMap.getShooterBottom().getSelectedSensorVelocity()/2048*1200);
+        if((RobotMap.getShooterBottom().getSelectedSensorVelocity() / 2048 * 1200) >= getShooterSetSpeed() - getShooterSetSpeed()*0.1) {
+            return true;
+        } else {
+            return false;
+        }
     }
      
 }

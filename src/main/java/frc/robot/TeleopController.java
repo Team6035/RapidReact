@@ -81,6 +81,31 @@ public class TeleopController {
             m_climber.setClimberDesiredState(ClimberStates.STOWED);
         }
 
+        if(m_shooter.getCurrentState() == ShooterState.SHOOTING) {
+            if(m_shooter.getShooterAtSpeed()) {
+                m_shooter.setIndexer(1);
+            }
+            m_shooter.setFeed(1);
+
+        } else if(m_shooter.getCurrentState() == ShooterState.EJECT) {
+            m_shooter.setIndexer(1);
+            m_shooter.setFeed(1);
+
+        } else if(m_backIntake.getCurrentState() == BackIntakeStates.INTAKING) {
+            m_shooter.setFeed(1);
+        } else if(m_backIntake.getCurrentState() == BackIntakeStates.UNINTAKING) {
+            m_shooter.setFeed(-1);
+            m_shooter.setIndexer(-1);
+        } else if(m_frontIntake.getCurrentState() == FrontIntakeStates.INTAKING) {
+            m_shooter.setFeed(1);
+        } else if(m_frontIntake.getCurrentState() == FrontIntakeStates.UNINTAKING) {
+            m_shooter.setFeed(-1);
+            m_shooter.setIndexer(-1);
+        } else {
+            m_shooter.setFeed(0);
+            m_shooter.setIndexer(0);
+        }
+
         callDrive();
         m_driverInterface.updateLimelightSpeedOffset();
         m_pneumatics.setCompressorStatus(true);
@@ -92,9 +117,9 @@ public class TeleopController {
 
     public void callDrive() {
         if(m_driverInterface.getRobotFowardDirection() == RobotFowardDirection.FRONT) {
-            m_drive.arcadeDrive(m_driverInterface.getJoystickAxis(JoystickAxisType.THROTTLE), m_driverInterface.getX(), m_driverInterface.getY(), m_driverInterface.getJoystickAxis(JoystickAxisType.ROTATION) * 0.1);
+            m_drive.arcadeDrive(m_driverInterface.getJoystickAxis(JoystickAxisType.THROTTLE), -m_driverInterface.getX(), m_driverInterface.getY());
         } else {
-            m_drive.arcadeDrive(-(m_driverInterface.getJoystickAxis(JoystickAxisType.THROTTLE)), m_driverInterface.getX(), m_driverInterface.getY(), m_driverInterface.getJoystickAxis(JoystickAxisType.ROTATION) * 0.1);
+            m_drive.arcadeDrive(-(m_driverInterface.getJoystickAxis(JoystickAxisType.THROTTLE)), m_driverInterface.getX(), m_driverInterface.getY());
         }
     }
 

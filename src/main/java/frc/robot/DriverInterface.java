@@ -119,13 +119,13 @@ public class DriverInterface {
     public double getJoystickAxis(JoystickAxisType axisType) {
         switch (axisType) {
             case X:
-                joystickAxisReturn = joystick1.getX();
+                joystickAxisReturn = deadZone(joystick1.getX());
             break;
             case Y:
-                joystickAxisReturn = joystick1.getY();
+                joystickAxisReturn = deadZone(joystick1.getY());
             break;
             case THROTTLE:
-                joystickAxisReturn = (joystick1.getThrottle() + 1)/2;
+                joystickAxisReturn = (-joystick1.getThrottle() + 1)/2;
             break;
             case ROTATION:
                 joystickAxisReturn = joystick1.getTwist();
@@ -189,7 +189,7 @@ public class DriverInterface {
 
     public double deadZone(double input) {
         if(input <= 0.05 && input >= -0.05) {
-            input = 0;
+            return 0;        
         }
         return input;
     }
