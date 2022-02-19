@@ -96,7 +96,7 @@ public class DriverInterface {
 
     private double limelightSpeedOffset = 0;
 
-    boolean climbEnabled = false;
+    boolean climbEnabled = true;
 
     /**
      * Method to set Xbox controller vibrate/rumble
@@ -266,7 +266,7 @@ public class DriverInterface {
     }
 
     public boolean getClimbResetCommand() {
-        return joystick1.getRawButton(12);
+        return xbox1.getXButton();
 
     }
 

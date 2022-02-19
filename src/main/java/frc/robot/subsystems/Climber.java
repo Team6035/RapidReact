@@ -177,8 +177,11 @@ public class Climber extends Subsystems {
         RobotMap.getLeftWinch().setNeutralMode(NeutralMode.Brake);
         RobotMap.getRightWinch().setNeutralMode(NeutralMode.Brake);
 
+        RobotMap.getLeftWinch().setInverted(true);
+        RobotMap.getRightWinch().setInverted(false);
 
-
+        RobotMap.getLeftWinch().configClosedloopRamp(2);
+        RobotMap.getRightWinch().configClosedloopRamp(2);
     }
     @Override
     public diagnosticState test() {
