@@ -1,6 +1,7 @@
 package frc.robot;
 
 
+import com.ctre.phoenix.CANifier;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -82,6 +83,7 @@ public class RobotMap {
 
 	static TalonFX leftWinch = new TalonFX(Constants.kLeftWinchCanID);
 	static TalonFX rightWinch = new TalonFX(Constants.kRightWinchCanID);
+	static CANifier climberSensors = new CANifier(Constants.kClimberCanifierCanID);
 
 	public static TalonFX getLeftWinch() {
 		return leftWinch;
@@ -89,6 +91,10 @@ public class RobotMap {
 
 	public static TalonFX getRightWinch() {
 		return rightWinch;
+	}
+
+	public static CANifier getClimberSensors() {
+		return climberSensors;
 	}
 
 	static PowerDistribution pdh = new PowerDistribution(Constants.kPDHCanID, ModuleType.kRev);

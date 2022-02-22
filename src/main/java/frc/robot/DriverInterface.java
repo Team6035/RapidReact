@@ -537,7 +537,13 @@ public class DriverInterface {
          
     }
 
+    public boolean getClimberManualOverride() {
+        return !(xbox1.getLeftY() <= 0.25 && xbox1.getLeftY() >= -0.25);
+    }
 
+    public double getClimberManualOverridePower() {
+        return -xbox1.getLeftY();
+    }
 
     //SmartDashboard (shuffleboard) commands
 

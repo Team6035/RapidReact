@@ -21,6 +21,7 @@ public class Constants {
 
 	public static final int kLeftWinchCanID = 19;
 	public static final int kRightWinchCanID = 20;
+	public static final int kClimberCanifierCanID = 40;
 
 
 	public static final int kPCMCanID = 50;
@@ -46,7 +47,7 @@ public class Constants {
 	public static final double kShooterP = 0.25;
 	public static final double kShooterI = 0.00014;
 
-	public static final double kClimberWinchP = 0.00823;
+	public static final double kClimberWinchP = 0.0054;
 
 	public static final double kIdleCurrent = 1; //Ampres
 	public static final double kIdleVoltageCutoff = 12.2; //volts
