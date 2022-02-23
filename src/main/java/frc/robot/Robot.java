@@ -56,10 +56,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    if (isEnabled() && !Drive.getInstance().getBrakes()) { // set to brake when enabled if not already set to brake
-      Drive.getInstance().setBrakes(true);
-    }
-    DriverInterface.getInstance().update();
+    
   }
 
   /**
@@ -126,7 +123,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit() {
-    Drive.getInstance().setBrakes(true);
+    Drive.getInstance().setBrakes(false);
 
   }
 
