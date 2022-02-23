@@ -584,9 +584,9 @@ public class DriverInterface {
     //               x   b
     //                 a
     public double updateLimelightSpeedOffset() {
-        if(xbox1.getRawButton(1)) {
+        if(xbox1.getYButton()) {
             limelightSpeedOffset = limelightSpeedOffset + Config.kLimelightOffsetAmmmount;
-        } else if(xbox1.getRawButton(3)) {
+        } else if(xbox1.getAButton()) {
             limelightSpeedOffset = limelightSpeedOffset - Config.kLimelightOffsetAmmmount;
         }
         return limelightSpeedOffset;
