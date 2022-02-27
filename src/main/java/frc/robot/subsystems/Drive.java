@@ -7,8 +7,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -106,14 +104,14 @@ public class Drive extends Subsystems {
        //System.out.println("Mode - " + currentMode);
         //set motors
        // System.out.println("leftpower " + leftPower);
-        RobotMap.getLeftDriveA().set(ControlMode.PercentOutput, leftPower * Config.kInvertDir);
-        RobotMap.getLeftDriveB().set(ControlMode.PercentOutput, leftPower * Config.kInvertDir);
+        RobotMap.getLeftDriveA().set(leftPower * Config.kInvertDir);
+        RobotMap.getLeftDriveB().set(leftPower * Config.kInvertDir);
 
 
       // System.out.println("rightpower " + rightPower);
 
-        RobotMap.getRightDriveA().set(ControlMode.PercentOutput, rightPower * Config.kInvertDir);
-        RobotMap.getRightDriveB().set(ControlMode.PercentOutput, rightPower * Config.kInvertDir);
+        RobotMap.getRightDriveA().set(rightPower * Config.kInvertDir);
+        RobotMap.getRightDriveB().set(rightPower * Config.kInvertDir);
 
 
         lastLeftSPeed = leftPower;
@@ -250,7 +248,7 @@ public class Drive extends Subsystems {
 	 * @return average distance since reset in metres.
 	 */
 	public double getAvgEncoderDistance() {
-		return Constants.kDriveEncoderConversionFactor * (RobotMap.getLeftDriveA().getSelectedSensorPosition() + -RobotMap.getRightDriveA().getSelectedSensorPosition()) / 2;
+        return 0;
     }
 
     /**
@@ -266,8 +264,6 @@ public class Drive extends Subsystems {
     }
     
     public void resetSensors() {
-        RobotMap.getLeftDriveA().setSelectedSensorPosition(0.0);
-        RobotMap.getRightDriveA().setSelectedSensorPosition(0.0);
         _imu.reset();
     }
 
@@ -277,17 +273,9 @@ public class Drive extends Subsystems {
      */ 
 	public void setBrakes(boolean brake) {
         if (brake) {
-            RobotMap.getLeftDriveA().setNeutralMode(NeutralMode.Brake);
-            RobotMap.getLeftDriveB().setNeutralMode(NeutralMode.Brake);
-            RobotMap.getRightDriveA().setNeutralMode(NeutralMode.Brake);
-            RobotMap.getRightDriveB().setNeutralMode(NeutralMode.Brake);
 
 
         } else {
-            RobotMap.getLeftDriveA().setNeutralMode(NeutralMode.Coast);
-            RobotMap.getLeftDriveB().setNeutralMode(NeutralMode.Coast);
-            RobotMap.getRightDriveA().setNeutralMode(NeutralMode.Coast);
-            RobotMap.getRightDriveB().setNeutralMode(NeutralMode.Coast);
         }
         
 	}

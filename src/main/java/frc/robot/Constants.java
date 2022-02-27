@@ -3,23 +3,26 @@ package frc.robot;
 
 public class Constants {
 
-    public static int kLeftDriveACanID = 1;
-    public static int kLeftDriveBCanID = 2;
-	public static int kLeftDriveCCanID = 3;
+    public static int kLeftDriveAPort = 0;
+    public static int kLeftDriveBPort = 1;
 
-    public static int kRightDriveACanID = 5;
-    public static int kRightDriveBCanID = 6;
-	public static int kRightDriveCCanID = 7;
+    public static int kRightDriveAPort = 2;
+    public static int kRightDriveBPort = 3;
 
-	public static int kShooterBottomCanID = 9;
-	public static int kShooterTopCanID = 10;
+	public static int kShooterBottomCanID = 7;
+	public static int kShooterTopCanID = 8;
 
-	public static final int kWinchCanID = 13;
-
+	public static final int kLeftWinchCanID = 9;
+	public static final int kRightWinchCanID = 10;
 
 	public static int kPCMCanID = 50;
 
-	public static int kIntakeEscCanID = 11;
+	public static int kIntakeMotorCanID = 5;
+	public static final int kIntakeSolenoidAChannel = 6;
+	public static final int kIntakeSolenoidBChannel = 7;
+
+
+	public static final int kFeedMotorCanID = 6;
 
     public static double kDriveMaxSpeed = 4.18;
 	public static double kDriveMaxAccel = 4.0;

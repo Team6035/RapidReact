@@ -2,45 +2,37 @@ package frc.robot;
 
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 
 public class RobotMap {
 
-	static TalonFX leftDriveA = new TalonFX(Constants.kLeftDriveACanID);
-	static TalonFX leftDriveB = new TalonFX(Constants.kLeftDriveBCanID);
-	static TalonFX leftDriveC = new TalonFX(Constants.kLeftDriveCCanID);
-	//public static MotorControllerGroup leftDriveMotors = new MotorControllerGroup(leftDriveA, leftDriveB, leftDriveC);
+	static VictorSP leftDriveA = new VictorSP(Constants.kLeftDriveAPort);
+	static VictorSP leftDriveB = new VictorSP(Constants.kLeftDriveBPort);
 
 
-	static TalonFX rightDriveA = new TalonFX(Constants.kRightDriveACanID);
-	static TalonFX rightDriveB = new TalonFX(Constants.kRightDriveBCanID);
-	static TalonFX rightDriveC = new TalonFX(Constants.kRightDriveCCanID);
-	//public static MotorControllerGroup rightDriveMotors = new MotorControllerGroup(rightDriveA, rightDriveB, rightDriveC);
+	static VictorSP rightDriveA = new VictorSP(Constants.kRightDriveAPort);
+	static VictorSP rightDriveB = new VictorSP(Constants.kRightDriveBPort);
 
-	public static TalonFX getLeftDriveA() {
+	public static VictorSP getLeftDriveA() {
 		return leftDriveA;
 	}
 
-	public static TalonFX getRightDriveA() {
+	public static VictorSP getRightDriveA() {
 		return rightDriveA;
 	}
 
-	public static TalonFX getLeftDriveB() {
+	public static VictorSP getLeftDriveB() {
 		return leftDriveB;
 	}
 
-	public static TalonFX getRightDriveB() {
+	public static VictorSP getRightDriveB() {
 		return rightDriveB;
-	}
-
-	public static TalonFX getLeftDriveC() {
-		return leftDriveC;
-	}
-
-	public static TalonFX getRightDriveC() {
-		return rightDriveC;
 	}
 
 	static TalonFX shooterBottom = new TalonFX(Constants.kShooterBottomCanID);
@@ -60,18 +52,30 @@ public class RobotMap {
 		return compressor;
 	}
 
-	static TalonFX frontIntakeMotor = new TalonFX(Constants.kIntakeEscCanID);
-	
-	public static TalonFX getIntakeESC() {
-		return frontIntakeMotor;
+	static VictorSPX intakeMotor = new VictorSPX(Constants.kIntakeMotorCanID);
+	static DoubleSolenoid intakeSolenoid = new DoubleSolenoid(Constants.kPCMCanID, PneumaticsModuleType.REVPH, Constants.kIntakeSolenoidAChannel, Constants.kIntakeSolenoidBChannel);	
+	public static VictorSPX getIntakeESC() {
+		return intakeMotor;
+	}
+
+	public static DoubleSolenoid getIntakeSolenoid() {
+		return intakeSolenoid;
+	}
+
+	static VictorSPX feedMotor = new VictorSPX(Constants.kFeedMotorCanID);
+	public static VictorSPX getFeedEsc() {
+		return feedMotor;
 	}
 
 
-	static TalonFX winch = new TalonFX(Constants.kWinchCanID);
+	static CANSparkMax leftWinch = new CANSparkMax(Constants.kLeftWinchCanID, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+	static CANSparkMax rightWinch = new CANSparkMax(Constants.kRightWinchCanID, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
 
-	public static TalonFX getWinch() {
-		return winch;
+	public static CANSparkMax getLeftWinch() {
+		return leftWinch;
 	}
 
-
+	public static CANSparkMax getRightWinch() {
+		return rightWinch;
+	}
 }

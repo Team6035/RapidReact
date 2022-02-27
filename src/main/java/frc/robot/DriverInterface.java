@@ -88,7 +88,7 @@ public class DriverInterface {
                 joystickAxisReturn = joystick1.getY();
             break;
             case THROTTLE:
-                joystickAxisReturn = (joystick1.getThrottle() + 1)/2;
+                joystickAxisReturn = (-joystick1.getThrottle() + 1)/2;
             break;
             case ROTATION:
                 joystickAxisReturn = joystick1.getTwist();
@@ -166,11 +166,11 @@ public class DriverInterface {
     }
 
     public boolean getShootCommand() {
-        return joystick1.getTrigger();
+        return joystick1.getRawButton(2);
     }
 
     public boolean getIntakeCommand() {
-        return joystick1.getRawButton(2);
+        return joystick1.getRawButton(1);
     }
 
     public boolean getClimbResetCommand() {

@@ -43,15 +43,21 @@ public class TeleopController {
     public void callTeleopController() {
 
         if(m_driverInterface.getShootCommand()) {
+            m_intake.setDesiredState(IntakeStates.IDLE);
             m_shooter.setDesiredState(ShooterState.SHOOTING);
+            if(m_shooter.getShooterAtSpeed()) {
+                m_shooter.runFeed(1);
+            } else {
+                m_shooter.runFeed(0);
+            }
+        } else if(m_driverInterface.getIntakeCommand()) {
+            m_shooter.runFeed(1);
+            m_intake.setDesiredState(IntakeStates.INTAKING);
+            m_shooter.setDesiredState(ShooterState.IDLE);
         } else {
             m_shooter.setDesiredState(ShooterState.IDLE);
-        }
-
-        if(m_driverInterface.getIntakeCommand()) {
-            m_intake.setDesiredState(IntakeStates.INTAKING);
-        } else {
             m_intake.setDesiredState(IntakeStates.IDLE);
+            m_shooter.runFeed(0);
         }
 
         
@@ -62,6 +68,8 @@ public class TeleopController {
             m_climber.setClimberDesiredState(ClimberStates.HOOKED);
         } else if(m_driverInterface.getClimbResetCommand()) {
             m_climber.setClimberDesiredState(ClimberStates.STOWED);
+        } else {
+            m_climber.setClimberDesiredState(ClimberStates.IDLE);
         }
 
         callDrive();

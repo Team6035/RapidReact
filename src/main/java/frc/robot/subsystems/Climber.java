@@ -4,8 +4,11 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import frc.robot.Config;
 import frc.robot.Constants;
@@ -19,6 +22,7 @@ public class Climber extends Subsystems {
         STOWED,
         EXTENDED,
         HOOKED,
+        IDLE,
     }
 
     public enum ClimberBarStates {
@@ -29,8 +33,13 @@ public class Climber extends Subsystems {
         STOWED,
     }
 
-    private ClimberStates currentClimberState = ClimberStates.STOWED;
-    private ClimberStates desiredClimberState = ClimberStates.STOWED;
+    private ClimberStates currentClimberState = ClimberStates.IDLE;
+    private ClimberStates desiredClimberState = ClimberStates.IDLE;
+    private SparkMaxPIDController leftWinchPIDController = RobotMap.getLeftWinch().getPIDController();
+    private SparkMaxPIDController rightWinchPIDController = RobotMap.getRightWinch().getPIDController();
+    private RelativeEncoder leftWinchEncoder = RobotMap.getLeftWinch().getEncoder();
+    private RelativeEncoder rightWinchEncoder = RobotMap.getRightWinch().getEncoder();
+
 
     private static Climber m_instance;
 
@@ -48,28 +57,25 @@ public class Climber extends Subsystems {
     @Override
     public void update() {
 
-
+        System.out.println(rightWinchEncoder.getPosition());
         switch(currentClimberState) {
             default: //stowed
-                RobotMap.getWinch().set(ControlMode.Position, Config.kClimberStowedPos);
-            
-                if(RobotMap.getWinch().getSelectedSensorPosition() <= Config.kClimberStowedPos + Config.kClimberHysteresis) {
+                leftWinchPIDController.setReference(Config.kClimberStowedPos, ControlType.kPosition);  
+                rightWinchPIDController.setReference(Config.kClimberStowedPos, ControlType.kPosition);                      
                     currentClimberState = desiredClimberState;
-                }
             break;
             case EXTENDED:
-                RobotMap.getWinch().set(ControlMode.Position, Config.kClimberUpPos);
-            
-                if(RobotMap.getWinch().getSelectedSensorPosition() >= Config.kClimberUpPos - Config.kClimberHysteresis) {
+                leftWinchPIDController.setReference(Config.kClimberUpPos, ControlType.kPosition);  
+                rightWinchPIDController.setReference(Config.kClimberUpPos, ControlType.kPosition);                      
                     currentClimberState = desiredClimberState;
-                }
             break;
             case HOOKED:
-                RobotMap.getWinch().set(ControlMode.Position, Config.kClimberHookedPos);
-            
-                if(RobotMap.getWinch().getSelectedSensorPosition() <= Config.kClimberHookedPos + Config.kClimberHysteresis) {
+                leftWinchPIDController.setReference(Config.kClimberStowedPos, ControlType.kPosition);  
+                rightWinchPIDController.setReference(Config.kClimberStowedPos, ControlType.kPosition);                      
                     currentClimberState = desiredClimberState;
-                }
+            break;
+            case IDLE:
+                currentClimberState = desiredClimberState;
             break;
         } 
     
@@ -78,7 +84,9 @@ public class Climber extends Subsystems {
     @Override
     public void resetSensors() {
 
-        RobotMap.getWinch().setSelectedSensorPosition(0);
+        leftWinchEncoder.setPosition(0);
+        rightWinchEncoder.setPosition(0);
+
 
     }
     @Override
@@ -94,12 +102,26 @@ public class Climber extends Subsystems {
     @Override
     public void initMotorControllers() {
         
-        RobotMap.getWinch().configFactoryDefault();
+        RobotMap.getLeftWinch().restoreFactoryDefaults();
+        RobotMap.getLeftWinch().setIdleMode(IdleMode.kBrake);
+        RobotMap.getRightWinch().restoreFactoryDefaults();
+        RobotMap.getRightWinch().setIdleMode(IdleMode.kBrake);
 
-        RobotMap.getWinch().config_kP(0, Constants.kClimberWinchP);
+        RobotMap.getLeftWinch().enableSoftLimit(SoftLimitDirection.kForward, true);
+        RobotMap.getLeftWinch().enableSoftLimit(SoftLimitDirection.kReverse, true);
 
-        RobotMap.getWinch().setNeutralMode(NeutralMode.Brake);
+        RobotMap.getRightWinch().enableSoftLimit(SoftLimitDirection.kForward, true);
+        RobotMap.getRightWinch().enableSoftLimit(SoftLimitDirection.kReverse, true);
 
+        RobotMap.getLeftWinch().setSoftLimit(SoftLimitDirection.kForward, 0);
+        RobotMap.getRightWinch().setSoftLimit(SoftLimitDirection.kReverse, 0);
+
+        RobotMap.getLeftWinch().setSoftLimit(SoftLimitDirection.kReverse, Config.kWinchMaxPos);
+        RobotMap.getRightWinch().setSoftLimit(SoftLimitDirection.kForward, Config.kWinchMaxPos);
+    
+
+        leftWinchPIDController.setP(Constants.kClimberWinchP);
+        leftWinchPIDController.setP(Constants.kClimberWinchP);
 
 
     }

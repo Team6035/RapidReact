@@ -35,7 +35,7 @@ public class Shooter extends Subsystems{
     private static ShooterSpeedSlot speedSlot = ShooterSpeedSlot.IDLE;
 
     private double shooterIdleSpeed = 0;
-    private double shooterShootSpeed = 2500;
+    private double shooterShootSpeed = 5000;
     private double shooterEjectSpeed = 100;
 
     private double ratio = 1;
@@ -94,8 +94,8 @@ public class Shooter extends Subsystems{
         RobotMap.getShooterBottom().config_kI(0, Constants.kShooterI);       
         RobotMap.getShooterTop().config_kI(0, Constants.kShooterI);     
 
-        RobotMap.getShooterBottom().setInverted(true);
-        RobotMap.getShooterTop().setInverted(true);
+        RobotMap.getShooterBottom().setInverted(false);
+        RobotMap.getShooterTop().setInverted(false);
 
     }
 
@@ -209,5 +209,17 @@ public class Shooter extends Subsystems{
         RobotMap.getShooterTop().set(ControlMode.PercentOutput, 0);
 
     }
+
+    public boolean getShooterAtSpeed() {
+        if((RobotMap.getShooterBottom().getSelectedSensorVelocity() / 2048 * 1200) >= getShooterSetSpeed() - getShooterSetSpeed()*0.1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void runFeed(double power) {
+        RobotMap.getFeedEsc().set(ControlMode.PercentOutput, power);
+    } 
      
 }

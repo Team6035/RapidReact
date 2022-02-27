@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.Config;
 import frc.robot.RobotMap;
 
@@ -40,18 +41,20 @@ public class Intake extends Subsystems{
 
         switch(currentState) {
             default:
-
+                RobotMap.getIntakeSolenoid().set(Value.kReverse);
                 RobotMap.getIntakeESC().set(ControlMode.PercentOutput, 0);
                 currentState = desiredState;
 
             break;
             case INTAKING: 
+                RobotMap.getIntakeSolenoid().set(Value.kForward);
 
                 RobotMap.getIntakeESC().set(ControlMode.PercentOutput, Config.kIntakeSpeed);
                 currentState = desiredState;
 
             break;
             case UNINTAKING: 
+                RobotMap.getIntakeSolenoid().set(Value.kForward);
 
                 RobotMap.getIntakeESC().set(ControlMode.PercentOutput, Config.kIntakeSpeed * -1);
                 currentState = desiredState;
