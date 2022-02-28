@@ -6,7 +6,6 @@ package frc.robot;
 
 import frc.robot.DriverInterface.JoystickAxisType;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.Climber.ClimberStates;
 import frc.robot.subsystems.Intake.IntakeStates;
 import frc.robot.subsystems.Shooter.ShooterSpeedSlot;
 import frc.robot.subsystems.Shooter.ShooterState;
@@ -62,14 +61,19 @@ public class TeleopController {
 
         
 
-        if(m_driverInterface.getClimbUpCommand()) {
-            m_climber.setClimberDesiredState(ClimberStates.EXTENDED);
-        } else if(m_driverInterface.getClimbDownCommand()) {
-            m_climber.setClimberDesiredState(ClimberStates.HOOKED);
-        } else if(m_driverInterface.getClimbResetCommand()) {
-            m_climber.setClimberDesiredState(ClimberStates.STOWED);
+        // if(m_driverInterface.getClimbUpCommand()) {
+        //     m_climber.setClimberDesiredState(ClimberStates.EXTENDED);
+        // } else if(m_driverInterface.getClimbDownCommand()) {
+        //     m_climber.setClimberDesiredState(ClimberStates.HOOKED);
+        // } else if(m_driverInterface.getClimbResetCommand()) {
+        //     m_climber.setClimberDesiredState(ClimberStates.STOWED);
+        // } else {
+        //     m_climber.setClimberDesiredState(ClimberStates.IDLE);
+        // }
+        if(m_driverInterface.getClimbManualOverride()) {
+            m_climber.climbManualPower(m_driverInterface.getClimbManual());
         } else {
-            m_climber.setClimberDesiredState(ClimberStates.IDLE);
+            m_climber.climbManualPower(0);
         }
 
         callDrive();
@@ -77,6 +81,8 @@ public class TeleopController {
 
         //Update shooter values
         m_shooter.setShooterSpeed(ShooterSpeedSlot.SHOOTING, m_driverInterface.getShooterSpeedField());
+
+
 
     }
 

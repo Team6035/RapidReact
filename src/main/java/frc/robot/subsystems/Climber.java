@@ -106,6 +106,9 @@ public class Climber extends Subsystems {
         RobotMap.getLeftWinch().setIdleMode(IdleMode.kBrake);
         RobotMap.getRightWinch().restoreFactoryDefaults();
         RobotMap.getRightWinch().setIdleMode(IdleMode.kBrake);
+        RobotMap.getLeftWinch().setInverted(false);
+        RobotMap.getRightWinch().setInverted(false);
+
 
         RobotMap.getLeftWinch().enableSoftLimit(SoftLimitDirection.kForward, true);
         RobotMap.getLeftWinch().enableSoftLimit(SoftLimitDirection.kReverse, true);
@@ -114,10 +117,10 @@ public class Climber extends Subsystems {
         RobotMap.getRightWinch().enableSoftLimit(SoftLimitDirection.kReverse, true);
 
         RobotMap.getLeftWinch().setSoftLimit(SoftLimitDirection.kForward, 0);
-        RobotMap.getRightWinch().setSoftLimit(SoftLimitDirection.kReverse, 0);
+        RobotMap.getLeftWinch().setSoftLimit(SoftLimitDirection.kReverse, -Config.kWinchMaxPos);
 
-        RobotMap.getLeftWinch().setSoftLimit(SoftLimitDirection.kReverse, Config.kWinchMaxPos);
         RobotMap.getRightWinch().setSoftLimit(SoftLimitDirection.kForward, Config.kWinchMaxPos);
+        RobotMap.getRightWinch().setSoftLimit(SoftLimitDirection.kReverse, 0);
     
 
         leftWinchPIDController.setP(Constants.kClimberWinchP);
@@ -145,6 +148,22 @@ public class Climber extends Subsystems {
     public void  setClimberDesiredState(ClimberStates desiredState) {
         desiredClimberState = desiredState;
     }
+
+    public void climbManualPower(double leftPower, double rightPower) {
+        RobotMap.getLeftWinch().set(leftPower);
+        RobotMap.getRightWinch().set(-rightPower);
+    }
+
+    public void climbManualPower(double power) {
+        climbManualPower(power, power);
+    }
     
+    public void setSoftLimits(boolean enabled) {
+        RobotMap.getLeftWinch().enableSoftLimit(SoftLimitDirection.kForward, enabled);
+        RobotMap.getLeftWinch().enableSoftLimit(SoftLimitDirection.kReverse, enabled);
+        RobotMap.getRightWinch().enableSoftLimit(SoftLimitDirection.kForward, enabled);
+        RobotMap.getRightWinch().enableSoftLimit(SoftLimitDirection.kReverse, enabled);
+
+    }
 
 }

@@ -94,7 +94,7 @@ public class Config {
     //Climber hysteresis
     public static final double kClimberHysteresis = 1000;
 
-    public static final float kWinchMaxPos = 32; 
+    public static final float kWinchMaxPos = 34; 
 
 
         

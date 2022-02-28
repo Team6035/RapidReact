@@ -72,6 +72,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    Climber.getInstance().setSoftLimits(true);
+
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
@@ -96,6 +98,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
 
     Climber.getInstance().resetSensors();
+    Climber.getInstance().setSoftLimits(true);
     DriverInterface.getInstance().printVersionNumber(Config.versionType, Config.version);
 
   }
@@ -115,7 +118,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    Climber.getInstance().setSoftLimits(true);
+
+  }
 
   /** This function is called periodically when disabled. */
   @Override
@@ -123,9 +129,24 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when test mode is enabled. */
   @Override
-  public void testInit() {}
+  public void testInit() {
+    Climber.getInstance().setSoftLimits(false);
+
+  }
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    if(m_driverInterface.getLeftClimbPower() >= 0.25 || m_driverInterface.getLeftClimbPower() <= -0.25) {
+        if(m_driverInterface.getRightClimbPower() >= 0.25 || m_driverInterface.getRightClimbPower() <= -0.25) {
+          Climber.getInstance().climbManualPower(m_driverInterface.getLeftClimbPower(), m_driverInterface.getRightClimbPower());
+        } else {
+          Climber.getInstance().climbManualPower(m_driverInterface.getLeftClimbPower(), 0);
+        }
+    } else if(m_driverInterface.getRightClimbPower() >= 0.25 || m_driverInterface.getRightClimbPower() <= -0.25) {
+      Climber.getInstance().climbManualPower(0, m_driverInterface.getRightClimbPower());
+    } else {
+      Climber.getInstance().climbManualPower(0, 0);
+    }
+  }
 }

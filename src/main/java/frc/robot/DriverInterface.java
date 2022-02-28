@@ -4,8 +4,8 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -59,7 +59,7 @@ public class DriverInterface {
 
 
     Joystick joystick1 = new Joystick(Config.kJoystick1Port);
-    GenericHID xbox1 = new GenericHID(Config.kXbox1Port);
+    PS4Controller xbox1 = new PS4Controller(Config.kXbox1Port);
 
     /**
      * Method to set Xbox controller vibrate/rumble
@@ -229,6 +229,22 @@ public class DriverInterface {
 
     public void outputShooterRPMField(double rpm) {
         SmartDashboard.putNumber("Shooter RPM", rpm);
+    }
+
+    public boolean getClimbManualOverride() {
+        return (xbox1.getLeftY() >= 0.25 || xbox1.getLeftY() <=-0.25);
+    }
+
+    public double getClimbManual() {
+        return xbox1.getLeftY();
+    }
+
+    public double getLeftClimbPower() {
+        return xbox1.getLeftY();
+    }
+
+    public double getRightClimbPower() {
+        return xbox1.getRightY();
     }
 
     
