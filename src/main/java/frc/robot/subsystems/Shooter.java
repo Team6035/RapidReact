@@ -35,7 +35,7 @@ public class Shooter extends Subsystems{
     private static ShooterSpeedSlot speedSlot = ShooterSpeedSlot.IDLE;
 
     private double shooterIdleSpeed = 0;
-    private double shooterShootSpeed = 5000;
+    private double shooterShootSpeed = 12000;
     private double shooterEjectSpeed = 100;
 
     private double ratio = 1;

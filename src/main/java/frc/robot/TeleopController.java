@@ -45,12 +45,12 @@ public class TeleopController {
             m_intake.setDesiredState(IntakeStates.IDLE);
             m_shooter.setDesiredState(ShooterState.SHOOTING);
             if(m_shooter.getShooterAtSpeed()) {
-                m_shooter.runFeed(1);
+                m_shooter.runFeed(0.5);
             } else {
                 m_shooter.runFeed(0);
             }
         } else if(m_driverInterface.getIntakeCommand()) {
-            m_shooter.runFeed(1);
+            m_shooter.runFeed(0.5);
             m_intake.setDesiredState(IntakeStates.INTAKING);
             m_shooter.setDesiredState(ShooterState.IDLE);
         } else {
