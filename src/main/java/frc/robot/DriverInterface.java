@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -18,6 +19,8 @@ public class DriverInterface {
     private static DriverInterface m_instance;
 
     private final SendableChooser<String> verboseOutputChooser = new SendableChooser<>();
+
+    CameraServer.startAutomaticCapture();
 
 
     public DriverInterface() {
@@ -59,7 +62,7 @@ public class DriverInterface {
 
 
     Joystick joystick1 = new Joystick(Config.kJoystick1Port);
-    PS4Controller xbox1 = new PS4Controller(Config.kXbox1Port);
+    XboxController xbox1 = new XboxController(Config.kXbox1Port);
 
     /**
      * Method to set Xbox controller vibrate/rumble
@@ -166,11 +169,23 @@ public class DriverInterface {
     }
 
     public boolean getShootCommand() {
-        return joystick1.getRawButton(2);
+        return joystick1.getRawButton(12) || xbox1.getLeftTriggerAxis() >= 0.5 || xbox1.getLeftBumper();
+    }
+
+    public boolean getCLimbEnableButton() {
+        return xbox1.getXButton();
     }
 
     public boolean getIntakeCommand() {
-        return joystick1.getRawButton(1);
+        return joystick1.getRawButton(1) || xbox1.getRightTriggerAxis() >= 0.5;
+    }
+
+    public boolean getIntakeReject() {
+        return xbox1.getBButton();
+    }
+
+    public boolean getIntakeStow() {
+        return xbox1.getRightBumper();
     }
 
     public boolean getClimbResetCommand() {
