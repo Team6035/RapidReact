@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.DriverInterface;
 import frc.robot.RobotMap;
@@ -211,6 +212,7 @@ public class Shooter extends Subsystems{
     }
 
     public boolean getShooterAtSpeed() {
+        // System.out.println(String.format("Shooter Speed %6.1f - %6.1f", RobotMap.getShooterBottom().getSelectedSensorVelocity(), getShooterSetSpeed()));
         if((RobotMap.getShooterBottom().getSelectedSensorVelocity() / 2048 * 1200) >= getShooterSetSpeed() - getShooterSetSpeed()*0.1) {
             return true;
         } else {
@@ -220,6 +222,7 @@ public class Shooter extends Subsystems{
 
     public void runFeed(double power) {
         RobotMap.getFeedEsc().set(ControlMode.PercentOutput, power);
+        // SmartDashboard.putNumber("Indexer", power);
     } 
      
 }
