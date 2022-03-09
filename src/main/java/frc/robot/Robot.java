@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    Climber.getInstance().setSoftLimits(true);
+    Climber.getInstance().setSoftLimits(false);
 
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
@@ -98,7 +98,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
 
     Climber.getInstance().resetSensors();
-    Climber.getInstance().setSoftLimits(true);
+    Climber.getInstance().setSoftLimits(false);
     DriverInterface.getInstance().printVersionNumber(Config.versionType, Config.version);
 
   }

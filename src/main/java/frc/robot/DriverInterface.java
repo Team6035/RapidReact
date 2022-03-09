@@ -250,7 +250,12 @@ public class DriverInterface {
     }
 
     public boolean getClimbManualOverride() {
-        return (xbox1.getLeftY() >= 0.25 || xbox1.getLeftY() <=-0.25);
+        return (xbox1.getRawButton(3));
+    }
+
+    public boolean getClimbDiffOverride() {
+        return Math.abs(getLeftClimbPower()) > 0.25 ||
+        Math.abs(getRightClimbPower()) > 0.25;
     }
 
     public double getClimbManual() {

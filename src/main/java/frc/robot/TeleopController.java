@@ -79,7 +79,13 @@ public class TeleopController {
         // }
         if(m_driverInterface.getClimbManualOverride()) {
             m_climber.climbManualPower(m_driverInterface.getClimbManual());
-        } else {
+        } else if (m_driverInterface.getClimbDiffOverride())
+        {
+            m_climber.climbManualPower(m_driverInterface.getLeftClimbPower(),
+                m_driverInterface.getRightClimbPower());
+        }
+        else
+        {
             m_climber.climbManualPower(0);
         }
 
