@@ -150,8 +150,13 @@ public class Climber extends Subsystems {
     }
 
     public void climbManualPower(double leftPower, double rightPower) {
-        RobotMap.getLeftWinch().set(leftPower);
-        RobotMap.getRightWinch().set(-rightPower);
+        if(!(leftPower == 0 && rightPower == 0 && currentClimberState == ClimberStates.IDLE)) {
+            RobotMap.getLeftWinch().set(leftPower);
+            RobotMap.getRightWinch().set(-rightPower);
+        } else {
+            RobotMap.getLeftWinch().set(0.05);
+            RobotMap.getRightWinch().set(-0.05);
+        }
     }
 
     public void climbManualPower(double power) {

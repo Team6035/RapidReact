@@ -17,10 +17,12 @@ public class Intake extends Subsystems{
         IDLE,
         INTAKING,
         UNINTAKING,
+        STOWED,
+        EXTENDED,
     }
 
-    private IntakeStates currentState = IntakeStates.IDLE;
-    private IntakeStates desiredState = IntakeStates.IDLE;
+    private IntakeStates currentState = IntakeStates.STOWED;
+    private IntakeStates desiredState = IntakeStates.STOWED;
     
     public Intake() {
 
@@ -41,7 +43,6 @@ public class Intake extends Subsystems{
 
         switch(currentState) {
             default:
-                RobotMap.getIntakeSolenoid().set(Value.kReverse);
                 RobotMap.getIntakeESC().set(ControlMode.PercentOutput, 0);
                 currentState = desiredState;
 
@@ -59,6 +60,15 @@ public class Intake extends Subsystems{
                 RobotMap.getIntakeESC().set(ControlMode.PercentOutput, Config.kIntakeSpeed * -1);
                 currentState = desiredState;
 
+            break;
+            case STOWED:
+                RobotMap.getIntakeSolenoid().set(Value.kReverse);
+                RobotMap.getIntakeESC().set(ControlMode.PercentOutput, 0);
+                currentState = desiredState;
+            break;
+            case EXTENDED:
+                RobotMap.getIntakeSolenoid().set(Value.kForward);
+                RobotMap.getIntakeESC().set(ControlMode.PercentOutput, 0);
             break;
         }
 

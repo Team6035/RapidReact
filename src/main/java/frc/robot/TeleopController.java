@@ -42,22 +42,29 @@ public class TeleopController {
     public void callTeleopController() {
 
         if(m_driverInterface.getShootCommand()) {
-            m_intake.setDesiredState(IntakeStates.IDLE);
             m_shooter.setDesiredState(ShooterState.SHOOTING);
-            if(m_shooter.getShooterAtSpeed()) {
-                m_shooter.runFeed(0.5);
-            } else {
-                m_shooter.runFeed(0);
-            }
-        } else if(m_driverInterface.getIntakeCommand()) {
-            m_shooter.runFeed(0.5);
-            m_intake.setDesiredState(IntakeStates.INTAKING);
-            m_shooter.setDesiredState(ShooterState.IDLE);
+        } else if(m_driverInterface.getEjectCommand()) {
+            m_shooter.setDesiredState(ShooterState.EJECT);
         } else {
             m_shooter.setDesiredState(ShooterState.IDLE);
+        }
+
+        if(m_driverInterface.getIntakeCommand()) {
+            m_intake.setDesiredState(IntakeStates.INTAKING);
+        } else if(m_driverInterface.getIntakeStow()) {
+            m_intake.setDesiredState(IntakeStates.STOWED);
+        } else if(false/*m_shooter.getShooterAtSpeed() && m_shooter.getCurrentState() == ShooterState.SHOOTING*/) {
+            m_intake.setDesiredState(IntakeStates.EXTENDED);
+        } else {
             m_intake.setDesiredState(IntakeStates.IDLE);
+        } 
+
+        if(m_shooter.getCurrentState() == ShooterState.SHOOTING || m_shooter.getCurrentState() == ShooterState.EJECT) {
+            m_shooter.runFeed(1);
+        } else {
             m_shooter.runFeed(0);
         }
+
 
         
 

@@ -4,8 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -19,8 +19,6 @@ public class DriverInterface {
     private static DriverInterface m_instance;
 
     private final SendableChooser<String> verboseOutputChooser = new SendableChooser<>();
-
-    CameraServer.startAutomaticCapture();
 
 
     public DriverInterface() {
@@ -169,7 +167,11 @@ public class DriverInterface {
     }
 
     public boolean getShootCommand() {
-        return joystick1.getRawButton(12) || xbox1.getLeftTriggerAxis() >= 0.5 || xbox1.getLeftBumper();
+        return joystick1.getRawButton(12) || xbox1.getLeftTriggerAxis() >= 0.5;
+    }
+
+    public boolean getEjectCommand() {
+        return xbox1.getLeftBumper();
     }
 
     public boolean getCLimbEnableButton() {
@@ -234,6 +236,7 @@ public class DriverInterface {
         verboseOutputChooser.addOption("Debug only", "DEBUG");
         verboseOutputChooser.addOption("Verbose + Debug", "ALL");
         SmartDashboard.putData("Verbose Output", verboseOutputChooser);
+        CameraServer.startAutomaticCapture(0);
 
 
     }
