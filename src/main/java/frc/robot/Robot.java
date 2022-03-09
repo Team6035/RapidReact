@@ -4,10 +4,16 @@
 
 package frc.robot;
 
+import java.util.LinkedList;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.*;
+import frc.sequencer.Sequence;
+import frc.sequencer.SequenceTest;
+import frc.sequencer.Sequencer;
+import frc.sequencer.owen.OwenSequence;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -15,10 +21,8 @@ import frc.robot.subsystems.*;
  * project.
  */
 public class Robot extends TimedRobot {
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  SendableChooser<Sequence> seqChooser;
+  Sequencer mySeq;
 
   Drive drivetrain = Drive.getInstance();
   static DriverInterface m_driverInterface = new DriverInterface();
@@ -37,10 +41,37 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+  // START Sequence setup section
+    // This grabs the different sequences and adds them to the
+    // SmartDashboard menu selection.
+    // As an example, SequenceTest.getSequences() has been setup
+    // to provide some sequences, however others can be added as
+    // well. Simply create a list of Sequence objects in seqList
+    // and they will be added to the chooser menu.
+    // Note that the very first item in the list will become the
+    // default selection.
+    LinkedList<Sequence> seqList = new LinkedList<Sequence>();
+    // seqList.addAll(SequenceTest.getSequences());
+    seqList.addAll(OwenSequence.getSequences());
+    seqChooser = new SendableChooser<Sequence>();
+    boolean first = true;
+    for (Sequence s : seqList)
+    {
+      if (first)
+      {
+        first = false;
+        seqChooser.setDefaultOption(s.getName(), s);
+      }
+      else
+      {
+        seqChooser.addOption(s.getName(), s);
+      }
+    }
+    SmartDashboard.putData(seqChooser);
+    //END Sequence setup section
+
+
     DriverInterface.getInstance().initSmartDashboard();
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
     Shooter.getInstance().initMotorControllers();
     Climber.getInstance().initMotorControllers();
   }
@@ -58,6 +89,7 @@ public class Robot extends TimedRobot {
       Drive.getInstance().setBrakes(true);
     }
     DriverInterface.getInstance().update();
+    SmartDashboard.putNumber("Yaw", Drive.getInstance().getYaw());
   }
 
   /**
@@ -72,25 +104,34 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    Drive.getInstance().setGameMode(Drive.gameMode.AUTO);
+
+    // The following code gets whichever sequence is selected
+    // from the SmartDashboard and sets up the sequencer to
+    // run it.
+    Sequence selectedAuto = seqChooser.getSelected();
+    Drive.getInstance().setAngle(getFieldAngle(selectedAuto.getStartPos()));
+    mySeq = new Sequencer();
+    mySeq.setInitialSteps(selectedAuto.getInitialSteps());
+    mySeq.setInitialTransitions(selectedAuto.getInitialTransitions());
+    mySeq.sequenceStart();
+
+
     Climber.getInstance().setSoftLimits(false);
 
-    m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
+    mySeq.update();
+    SmartDashboard.putString("Auto Step", mySeq.getStepName());
+    Drive.getInstance().autoUpdate();
+    Shooter.getInstance().update();
+    Intake.getInstance().update();
+    SmartDashboard.putString("IntakeMode", Intake.getInstance().getCurrentState()+"");
+    Pneumatics.getInstance().update();
+
   }
 
   /** This function is called once when teleop is enabled. */
@@ -106,12 +147,11 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-
-    Shooter.getInstance().update();
     Pneumatics.getInstance().update();
     Drive.getInstance().update();
     TeleopController.getInstance().callTeleopController();
     Intake.getInstance().update();
+    Shooter.getInstance().update();
     Climber.getInstance().update();
 
   }
@@ -149,4 +189,26 @@ public class Robot extends TimedRobot {
       Climber.getInstance().climbManualPower(0, 0);
     }
   }
+
+  private static double getFieldAngle(int aPosition)
+  {
+    if (aPosition == 1)
+    {
+      return -91.5;
+    }
+    if (aPosition == 2)
+    {
+      return -46.5;
+    }
+    if (aPosition == 3)
+    {
+      return -1.5;
+    }
+    if (aPosition == 4)
+    {
+      return 43.5;
+    }
+    return 0.0;
+  }
+
 }

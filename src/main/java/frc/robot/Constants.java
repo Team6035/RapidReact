@@ -36,6 +36,23 @@ public class Constants {
 	public static final double kEncoderDriveKp = 0.7;  // FIXME
 	public static final double kDriveEncoderConversionFactor = 0.000023077; //1; //0.00089291;
 
+	/**
+	 * Number of pulses per revolution of the drive wheel encoder.
+	 * The encoder is connected to the drive wheel axle, so there is no gearbox between it and the wheels.
+	 */
+	public static final double kEncoderPulsesPerRev = 360;
+	/**
+	 * Drive wheel diameter. This is approximate at the moment and it is this value that should be adjusted
+	 * in order to calibrate the encoders.
+	 */
+    public static final double kDriveWheelDia = 0.1505;
+	/**
+	 * Calculated distance in millimetres that the robot is driven per encoder pulse.
+	 * To calibrate this value, adjust {@link #kDriveWheelDia}
+	 */
+    public static final double kEncoderMPerPulse = kDriveWheelDia * Math.PI / kEncoderPulsesPerRev;
+
+
 	public static final double kShooterP = 0.3;
 	public static final double kShooterI = 0.00014;
 

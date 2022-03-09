@@ -69,6 +69,7 @@ public class Intake extends Subsystems{
             case EXTENDED:
                 RobotMap.getIntakeSolenoid().set(Value.kForward);
                 RobotMap.getIntakeESC().set(ControlMode.PercentOutput, 0);
+                currentState = desiredState;
             break;
         }
 
