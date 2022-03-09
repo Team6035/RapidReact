@@ -195,6 +195,10 @@ public class DriverInterface {
 
     }
 
+    public boolean getReverseCommand() {
+        return xbox1.getLeftBumper();
+    }
+
     public void update() {
         Shuffleboard.update();
         SmartDashboard.updateValues();

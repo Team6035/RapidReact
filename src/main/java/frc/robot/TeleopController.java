@@ -43,8 +43,6 @@ public class TeleopController {
 
         if(m_driverInterface.getShootCommand()) {
             m_shooter.setDesiredState(ShooterState.SHOOTING);
-        } else if(m_driverInterface.getEjectCommand()) {
-            m_shooter.setDesiredState(ShooterState.EJECT);
         } else {
             m_shooter.setDesiredState(ShooterState.IDLE);
         }
@@ -55,12 +53,16 @@ public class TeleopController {
             m_intake.setDesiredState(IntakeStates.STOWED);
         } else if(false/*m_shooter.getShooterAtSpeed() && m_shooter.getCurrentState() == ShooterState.SHOOTING*/) {
             m_intake.setDesiredState(IntakeStates.EXTENDED);
+        } else if(m_driverInterface.getReverseCommand()) {
+            m_intake.setDesiredState(IntakeStates.UNINTAKING);
         } else {
             m_intake.setDesiredState(IntakeStates.IDLE);
         } 
 
-        if(m_shooter.getCurrentState() == ShooterState.SHOOTING || m_shooter.getCurrentState() == ShooterState.EJECT) {
+        if(m_shooter.getShooterAtSpeed() && (m_shooter.getCurrentState() == ShooterState.SHOOTING || m_shooter.getCurrentState() == ShooterState.EJECT)) {
             m_shooter.runFeed(1);
+        } else if(m_intake.getCurrentState() == IntakeStates.UNINTAKING) {
+            m_shooter.runFeed(-1);
         } else {
             m_shooter.runFeed(0);
         }
