@@ -50,6 +50,8 @@ public class TeleopController {
         if(m_driverInterface.getIntakeCommand()) {
             m_intake.setDesiredState(IntakeStates.INTAKING);
         } else if(m_driverInterface.getIntakeStow()) {
+            m_intake.setDesiredState(IntakeStates.STOWSPIN);
+        } else if(m_intake.getCurrentState() == IntakeStates.STOWSPIN) {
             m_intake.setDesiredState(IntakeStates.STOWED);
         } else if(false/*m_shooter.getShooterAtSpeed() && m_shooter.getCurrentState() == ShooterState.SHOOTING*/) {
             m_intake.setDesiredState(IntakeStates.EXTENDED);

@@ -19,6 +19,7 @@ public class Intake extends Subsystems{
         UNINTAKING,
         STOWED,
         EXTENDED,
+        STOWSPIN,
     }
 
     private IntakeStates currentState = IntakeStates.STOWED;
@@ -64,6 +65,11 @@ public class Intake extends Subsystems{
             case STOWED:
                 RobotMap.getIntakeSolenoid().set(Value.kReverse);
                 RobotMap.getIntakeESC().set(ControlMode.PercentOutput, 0);
+                currentState = desiredState;
+            break;
+            case STOWSPIN:
+                RobotMap.getIntakeSolenoid().set(Value.kReverse);
+                RobotMap.getIntakeESC().set(ControlMode.PercentOutput, Config.kIntakeSpeed);
                 currentState = desiredState;
             break;
             case EXTENDED:
